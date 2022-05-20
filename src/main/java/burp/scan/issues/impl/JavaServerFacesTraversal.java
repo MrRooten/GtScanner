@@ -1,6 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.*;
@@ -92,7 +93,7 @@ public class JavaServerFacesTraversal implements IModule {
     }
 
     @Override
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
 
         IExtensionHelpers helpers = callbacks.getHelpers();

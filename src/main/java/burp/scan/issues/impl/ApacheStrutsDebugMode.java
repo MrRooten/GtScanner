@@ -1,7 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
@@ -61,7 +61,7 @@ public class ApacheStrutsDebugMode implements IModule {
     private PrintWriter stderr;
 
     @Override
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         IExtensionHelpers helpers = callbacks.getHelpers();
         stderr = new PrintWriter(callbacks.getStderr(), true);

@@ -1,6 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
@@ -44,7 +45,7 @@ public class JBossWS implements IModule{
     private PrintWriter stderr;
 
     @RunOnlyOnce
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         List<IScanIssue> issues = new ArrayList<>();
 

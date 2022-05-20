@@ -2,14 +2,10 @@ package burp.scan.passive;
 
 import burp.*;
 import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.Risk;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 
 public class NginxRule implements PassiveRule{
     @Override
@@ -22,10 +18,10 @@ public class NginxRule implements PassiveRule{
                      String httpServerHeader,
                      String contentTypeResponse,
                      String xPoweredByHeader,
-                     WebInfo webInfo) {
+                     WebPageInfo webInfo) {
         PrintWriter stderr = new PrintWriter(callbacks.getStderr(), true);
         PrintWriter stdout = new PrintWriter(callbacks.getStdout(), true);
-        WebInfo info = new WebInfo();
+        WebPageInfo info = new WebPageInfo();
         if (httpServerHeader == null) {
             return ;
         }

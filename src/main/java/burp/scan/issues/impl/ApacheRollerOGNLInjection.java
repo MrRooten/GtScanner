@@ -1,7 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
@@ -42,7 +42,7 @@ public class ApacheRollerOGNLInjection implements IModule {
     
 
     @RunOnlyOnce
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         
         // Execute a basic algorithm operation to detect OGNL code execution

@@ -6,7 +6,7 @@ import burp.IRequestInfo;
 import burp.IResponseInfo;
 import burp.scan.java.strutstoken.StrutsTokenCracker;
 import burp.scan.lib.Risk;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +26,7 @@ public class ApacheStrutsS2023Rule implements PassiveRule {
     public void scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse,
                      String reqBody, String respBody, IRequestInfo reqInfo, IResponseInfo respInfo,
                      String httpServerHeader, String contentTypeResponse, String xPoweredByHeader,
-                     WebInfo webInfo) {
+                     WebPageInfo webInfo) {
 
         //IExtensionHelpers helpers = callbacks.getHelpers();
 

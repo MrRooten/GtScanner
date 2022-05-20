@@ -2,7 +2,8 @@ package burp.scan.passive;
 
 import burp.*;
 import burp.scan.lib.Risk;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
+import burp.scan.tags.TagTypes;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +16,7 @@ public class JettyRule implements PassiveRule {
     public void scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse,
                      String reqBody, String respBody, IRequestInfo reqInfo, IResponseInfo respInfo,
                      String httpServerHeader, String contentTypeResponse, String xPoweredByHeader,
-                     WebInfo webInfo) {
+                     WebPageInfo webInfo) {
         IExtensionHelpers helpers = callbacks.getHelpers();
 
         /**
@@ -28,8 +29,7 @@ public class JettyRule implements PassiveRule {
             Matcher matcher = JETTY_PATTERN.matcher(respBody);
 
             if (matcher.find()) {
-              
-                callbacks.addScanIssue(new CustomScanIssue(
+                CustomScanIssue issue = new CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,
@@ -38,7 +38,10 @@ public class JettyRule implements PassiveRule {
                         "",
                         Risk.Information,
                         Confidence.Certain
-                ));
+                );
+                callbacks.addScanIssue(issue);
+                webInfo.addIssue(issue);
+                webInfo.addTag(TagTypes.Jetty_Java);
             }
 
         }

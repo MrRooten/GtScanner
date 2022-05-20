@@ -1,7 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
@@ -36,7 +36,7 @@ public class AJPDetector implements IModule {
     private static final int[] AJP13PORTS = {8080, 8102, 8081, 6800, 6802, 8009, 8109, 8209, 8309, 8888, 9999};
 
     @RunOnlyOnce
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         List<IScanIssue> issues = new ArrayList<>();
 

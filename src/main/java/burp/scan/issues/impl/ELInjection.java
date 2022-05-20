@@ -1,7 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.HTTPMatcher;
@@ -45,7 +45,7 @@ public class ELInjection implements IModule {
     private static final String REMEDY = "Update the remote vulnerable library";
 
     @Override
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         // Execute a basic algorithm operation to detect OGNL code execution
         int MAX_RANDOM_INT = 500;

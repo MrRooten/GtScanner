@@ -1,7 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
@@ -40,7 +40,7 @@ public class ApacheSolrXXE implements IModule {
             + "https://issues.apache.org/jira/browse/SOLR-11477<br />" 
             + "https://wiki.apache.org/solr/SolrSecurity";
 
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         IExtensionHelpers helpers = callbacks.getHelpers();
         List<IScanIssue> issues = new ArrayList<>();

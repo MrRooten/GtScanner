@@ -1,8 +1,7 @@
 package burp.scan.passive;
 
 import burp.*;
-import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
 import java.util.List;
@@ -32,14 +31,12 @@ public class ShiroRule implements PassiveRule {
                      IHttpRequestResponse baseRequestResponse,
                      String reqBody, String respBody,
                      IRequestInfo reqInfo, IResponseInfo respInfo, String httpServerHeader, String contentTypeResponse, String xPoweredByHeader,
-                     WebInfo webInfo) {
+                     WebPageInfo webInfo) {
         IExtensionHelpers helpers = callbacks.getHelpers();
-        IRequestInfo requestInfo = helpers.analyzeRequest(baseRequestResponse);
-        WebInfo info = new WebInfo();
-        if (isShiro(baseRequestResponse,requestInfo,helpers)) {
-            info.addTag(TagTypes.Shiro_Java);
+
+        if (isShiro(baseRequestResponse,reqInfo,helpers)) {
+            webInfo.addTag(TagTypes.Shiro_Java);
         }
-        RequestsInfo.getInstance().putInfo(requestInfo,info);
 
     }
 }

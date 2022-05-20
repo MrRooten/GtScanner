@@ -4,7 +4,6 @@ import burp.IHttpRequestResponse;
 import burp.IHttpService;
 import burp.IScanIssue;
 import burp.scan.lib.Risk;
-import burp.scan.lib.WebInfo;
 
 import java.net.URL;
 

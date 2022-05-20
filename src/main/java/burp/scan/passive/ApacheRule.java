@@ -4,8 +4,7 @@ import burp.IBurpExtenderCallbacks;
 import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
 import burp.IResponseInfo;
-import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
 public class ApacheRule implements PassiveRule{
@@ -34,7 +33,7 @@ public class ApacheRule implements PassiveRule{
                      String httpServerHeader,
                      String contentTypeResponse,
                      String xPoweredByHeader,
-                     WebInfo webInfo) {
+                     WebPageInfo webInfo) {
 
         if (httpServerHeader!=null && httpServerHeader.toLowerCase().contains("apache")) {
             webInfo.addTag(TagTypes.ApacheHttp_Base);

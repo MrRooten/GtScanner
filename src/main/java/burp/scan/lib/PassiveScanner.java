@@ -2,7 +2,7 @@ package burp.scan.lib;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
-import burp.scan.issues.IModule;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.*;
 
 import java.io.File;
@@ -95,7 +95,7 @@ public class PassiveScanner {
         String httpServerHeader = HTTPParser.getResponseHeaderValue(respInfo, "Server");
         String contentTypeResponse = HTTPParser.getResponseHeaderValue(respInfo, "Content-Type");
         String xPoweredByHeader = HTTPParser.getResponseHeaderValue(respInfo, "X-Powered-By");
-        WebInfo webInfo = new WebInfo();
+        WebPageInfo webInfo = new WebPageInfo();
         webInfo.setRequest(rawRequest);
         webInfo.setResponse(rawResponse);
         webInfo.setHttpRequestResponse(baseRequestResponse);

@@ -4,7 +4,7 @@ import burp.IBurpExtenderCallbacks;
 import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
 import burp.IResponseInfo;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 
 public class SerializeDetectRule implements PassiveRule {
     @Override
@@ -13,7 +13,7 @@ public class SerializeDetectRule implements PassiveRule {
                      IRequestInfo reqInfo, IResponseInfo respInfo,
                      String httpServerHeader, String contentTypeResponse,
                      String xPoweredByHeader,
-                     WebInfo webInfo) {
+                     WebPageInfo webInfo) {
 
     }
 }

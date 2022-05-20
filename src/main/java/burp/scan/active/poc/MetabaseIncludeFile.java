@@ -3,7 +3,7 @@ package burp.scan.active.poc;
 import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.lib.HTTPParser;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
 import java.net.MalformedURLException;
@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 
 public class MetabaseIncludeFile implements ModuleBase {
     @Override
-    public void scan(IBurpExtenderCallbacks callbacks, WebInfo webInfo) {
+    public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
         if (!webInfo.hasTag(TagTypes.MetaBase_Base)) {
             return ;
         }

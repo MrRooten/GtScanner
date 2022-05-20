@@ -1,4 +1,4 @@
-package burp.scan.lib;
+package burp.scan.lib.web;
 
 import burp.IHttpRequestResponse;
 import burp.scan.passive.CustomScanIssue;
@@ -12,7 +12,7 @@ import java.util.Set;
 /*
 * This Class is for saving passive module result
 * */
-public class WebInfo {
+public class WebPageInfo {
     public Set<String> tags = new HashSet<>();
     public Class scanModule = null;
     public String url = null;

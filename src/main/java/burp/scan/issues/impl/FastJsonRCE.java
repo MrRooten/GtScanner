@@ -1,7 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.HTTPParser;
@@ -50,7 +50,7 @@ public class FastJsonRCE implements IModule {
 
     private PrintWriter stderr;
 
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         // https://itw01.com/22AOEYL.html
         // https://github.com/jas502n/fastjson-1.2.61-RCE

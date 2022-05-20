@@ -2,7 +2,7 @@ package burp.scan.issues.impl;
 
 
 import burp.*;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
@@ -44,7 +44,7 @@ public class IDocInjection implements IModule {
     private static final List<byte[]> EL_INJECTION_TESTS = Arrays.asList(
             "<$fileName=\"../../../../../../../../../../../etc/passwd\"$><$executeService(\"GET_LOGGED_SERVER_OUTPUT\")$><$ServerOutput$>".getBytes());
 
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         IExtensionHelpers helpers = callbacks.getHelpers();
         List<IScanIssue> issues = new ArrayList<>();

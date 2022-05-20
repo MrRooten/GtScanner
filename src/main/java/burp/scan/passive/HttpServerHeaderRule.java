@@ -3,7 +3,7 @@ package burp.scan.passive;
 import burp.*;
 import burp.scan.java.SoftwareVersions;
 import burp.scan.lib.Risk;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class HttpServerHeaderRule implements PassiveRule {
     public void scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse,
             String reqBody, String respBody, IRequestInfo reqInfo, IResponseInfo respInfo,
             String httpServerHeader, String contentTypeResponse, String xPoweredByHeader,
-                     WebInfo webInfo) {
+                     WebPageInfo webInfo) {
 
         IExtensionHelpers helpers = callbacks.getHelpers();
 

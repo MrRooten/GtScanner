@@ -1,7 +1,7 @@
 package burp.scan.issues.impl;
 
 import burp.*;
-import burp.scan.lib.WebInfo;
+import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
@@ -39,7 +39,7 @@ public class ApacheStrutsS2020 implements IModule {
     private static final Pattern CLASSLOADER_PM = Pattern.compile("Invalid field value for field|No result defined for action",
             Pattern.DOTALL | Pattern.MULTILINE);
 
-    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebInfo webInfo) {
+    public List<IScanIssue> scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint, WebPageInfo webInfo) {
 
         IExtensionHelpers helpers = callbacks.getHelpers();
 
