@@ -1,0 +1,37 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+repositories {
+    mavenCentral()
+}
+mainClassName = 'burp/BurpExtender'
+targetCompatibility = '1.8'
+sourceCompatibility = '1.8'
+
+dependencies {
+    implementation 'net.portswigger.burp.extender:burp-extender-api:1.7.13'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+}
+
+task fatJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    baseName = project.name + '-all'
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+test {
+    useJUnitPlatform()
+}
