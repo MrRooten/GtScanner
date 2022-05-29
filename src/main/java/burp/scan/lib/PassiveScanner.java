@@ -2,6 +2,7 @@ package burp.scan.lib;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.passive.*;
 
@@ -40,6 +41,31 @@ public class PassiveScanner {
             new ApacheRule()
     };
 
+    static List<ModuleBase> getModules() {
+        List<String> modules = null;
+        List<ModuleBase> result = new ArrayList<>();
+        try {
+            modules = getClassNamesFromPackage("burp.scan.active.poc.");
+            for (String module : modules) {
+                if (module.contains("$")) {
+                    continue;
+                }
+
+                Constructor<?> c = Class.forName("burp.scan.active.poc." + module).getConstructor();
+                ModuleBase gtModule = (ModuleBase) c.newInstance();
+                for (Method m : gtModule.getClass().getMethods()) {
+                    if (m.getName().equals("scan")) {
+                        result.add(gtModule);
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException | InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    static List<ModuleBase> ACTIVE_MODULES = getModules();
     public static ArrayList<String> getClassNamesFromPackage(String packageName) throws IOException {
         URL packageURL;
         ArrayList<String> names = new ArrayList<>();
@@ -78,6 +104,40 @@ public class PassiveScanner {
         }
         return names;
     }
+
+    public static boolean isValidContentType(String contentTypeResponse) {
+        do {
+            if (contentTypeResponse == null) {
+                return false;
+            }
+
+            if (contentTypeResponse.contains("text")) {
+                return true;
+            }
+
+            if (contentTypeResponse.contains("application")) {
+                if (contentTypeResponse.contains("json")) {
+                    return true;
+                }
+
+                if (contentTypeResponse.contains("xml")) {
+                    return true;
+                }
+
+
+            }
+
+            if (contentTypeResponse.contains("image")) {
+                break;
+            }
+
+            if (contentTypeResponse.contains("audio")) {
+                break;
+            }
+        }while(false);
+
+        return false;
+    }
     public static void scanVulnerabilities(IHttpRequestResponse baseRequestResponse,
                                            IBurpExtenderCallbacks callbacks) {
 
@@ -94,8 +154,17 @@ public class PassiveScanner {
 
         String httpServerHeader = HTTPParser.getResponseHeaderValue(respInfo, "Server");
         String contentTypeResponse = HTTPParser.getResponseHeaderValue(respInfo, "Content-Type");
+
+        if (!isValidContentType(contentTypeResponse)) {
+            return ;
+        }
+        long MAX_SIZE = 1024 * 1024 * 1024 * 10L;
+        if (Long.parseLong(HTTPParser.getResponseHeaderValue(respInfo,"Content-Length").trim()) > MAX_SIZE) {
+            return ;
+        }
         String xPoweredByHeader = HTTPParser.getResponseHeaderValue(respInfo, "X-Powered-By");
-        WebPageInfo webInfo = new WebPageInfo();
+        //stdout.println(reqInfo.getUrl().toString());
+        WebPageInfo webInfo = new WebPageInfo(reqInfo.getUrl().toString());
         webInfo.setRequest(rawRequest);
         webInfo.setResponse(rawResponse);
         webInfo.setHttpRequestResponse(baseRequestResponse);
@@ -103,25 +172,16 @@ public class PassiveScanner {
             scanner.scan(callbacks,baseRequestResponse,reqBody,respBody,reqInfo,respInfo,
                     httpServerHeader,contentTypeResponse, xPoweredByHeader,webInfo);
         }
-        stdout.println(reqInfo.getUrl()+ ":" + webInfo.tags.toString());
+        stdout.println(webInfo.getSiteInfo().getHost() + ":" + webInfo.getSiteInfo().getTags().toString());
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        try {
-            List<String> modules = getClassNamesFromPackage("burp.scan.active.poc.");
-            for (String module : modules) {
-                if (module.contains("$")) {
+        for (ModuleBase module : ACTIVE_MODULES) {
+            if (webInfo.getSiteInfo().containsRunnedModule(module)) {
+                if (module instanceof RunOnce) {
                     continue;
                 }
-
-                Constructor<?> c = Class.forName("burp.scan.active.poc." + module).getConstructor();
-                ModuleBase gtModule = (ModuleBase) c.newInstance();
-                for (Method m : gtModule.getClass().getMethods()) {
-                    if (m.getName().equals("scan")) {
-                        gtModule.scan(callbacks,webInfo);
-                    }
-                }
             }
-        } catch (IOException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
-            e.printStackTrace();
+            module.scan(callbacks,webInfo);
+            webInfo.getSiteInfo().addRunnedModule(module);
         }
     }
 

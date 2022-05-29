@@ -21,16 +21,15 @@ public class NginxRule implements PassiveRule{
                      WebPageInfo webInfo) {
         PrintWriter stderr = new PrintWriter(callbacks.getStderr(), true);
         PrintWriter stdout = new PrintWriter(callbacks.getStdout(), true);
-        WebPageInfo info = new WebPageInfo();
         if (httpServerHeader == null) {
             return ;
         }
 
         if (httpServerHeader.toLowerCase().contains("nginx")) {
-            info.addTag(TagTypes.Nginx_Base);
+            webInfo.addTag(TagTypes.Nginx_Base);
         }
 
         RequestsInfo requestsInfo = RequestsInfo.getInstance();
-        requestsInfo.putInfo(reqInfo,info);
+        requestsInfo.putInfo(reqInfo,webInfo);
     }
 }

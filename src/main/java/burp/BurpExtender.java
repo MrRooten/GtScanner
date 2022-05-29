@@ -1,5 +1,6 @@
 package burp;
 
+import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.PassiveScanner;
 import burp.scan.lib.Risk;
 import burp.scan.passive.Confidence;
@@ -41,6 +42,9 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
         callbacks.registerScannerCheck(this);
 
         TagUtils.InitTags();
+
+        GlobalFunction.callbacks = callbacks;
+        GlobalFunction.helpers = callbacks.getHelpers();
     }
 
     // helper method to search a response for occurrences of a literal match string

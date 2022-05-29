@@ -46,4 +46,5 @@ public enum TagTypes {
     SpringCloud_Spring,
     SpringDataCommon_Spring,
     SpringBoot_Spring,
+    PHPMyAdmin_PHP
 };
