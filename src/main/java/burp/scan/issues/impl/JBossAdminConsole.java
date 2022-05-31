@@ -2,11 +2,10 @@ package burp.scan.issues.impl;
 
 import burp.*;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
 import burp.scan.lib.*;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -116,7 +115,7 @@ public class JBossAdminConsole implements IModule {
         byte[] httpResponse = resp.getResponse();
         List<int[]> matches = getMatches(httpResponse, GREP_STRING_CVE20101871, helpers);
         if (matches.size() > 0) {
-            callbacks.addScanIssue(new CustomScanIssue(
+            callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                     baseRequestResponse.getHttpService(),
                     new URL(url.getProtocol(), url.getHost(), url.getPort(), "/admin-console/login.seam"),
                     new CustomHttpRequestResponse(seamMesssage, httpResponse, baseRequestResponse.getHttpService()),
@@ -175,7 +174,7 @@ public class JBossAdminConsole implements IModule {
 
                             if (matches.size() > 0) {
 
-                                    callbacks.addScanIssue(new CustomScanIssue(
+                                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                                             baseRequestResponse.getHttpService(),
                                             new URL(protocol, url.getHost(), url.getPort(), "/admin-console/login.seam"),
                                             new CustomHttpRequestResponse(jbosstest, response, baseRequestResponse.getHttpService()),
@@ -242,7 +241,7 @@ public class JBossAdminConsole implements IModule {
                                                 if (responseHeaders.get(h).toLowerCase().startsWith("location".toLowerCase())
                                                         && responseHeaders.get(h).toLowerCase().contains("secure/summary.seam")) {
 
-                                                    callbacks.addScanIssue(new CustomScanIssue(
+                                                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                                                             baseRequestResponse.getHttpService(),
                                                             new URL(protocol, url.getHost(), url.getPort(), JBOSS_ADMIN_PATH),
                                                             new CustomHttpRequestResponse(evilMessage, checkRequestResponse.getResponse(), baseRequestResponse.getHttpService()),

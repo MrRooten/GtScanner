@@ -5,10 +5,11 @@ import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
 import burp.IResponseInfo;
 import burp.scan.lib.HTTPParser;
+import burp.scan.lib.PassiveRule;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
-public class PHPMyAdminRule implements PassiveRule{
+public class PHPMyAdminRule implements PassiveRule {
     private boolean isPHPMyAdmin(String respBody,IResponseInfo respInfo) {
         if (respBody.contains("href=\"phpmyadmin.css.php")) {
             return true;

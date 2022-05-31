@@ -1,11 +1,11 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -64,7 +64,7 @@ public class JavascriptSSRF implements IModule {
 
         if (!collaboratorInteractions.isEmpty()) {
 
-            issues.add(new CustomScanIssue(
+            issues.add(new RequestsInfo.CustomScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     checkRequestResponse,

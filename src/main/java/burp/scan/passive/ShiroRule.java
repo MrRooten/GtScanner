@@ -1,6 +1,7 @@
 package burp.scan.passive;
 
 import burp.*;
+import burp.scan.lib.PassiveRule;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 

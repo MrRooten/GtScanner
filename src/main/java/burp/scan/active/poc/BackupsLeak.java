@@ -3,21 +3,21 @@ package burp.scan.active.poc;
 import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.Debug;
+import burp.scan.active.feature.Disable;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.lib.web.utils.GtRequest;
 import burp.scan.lib.web.utils.GtURL;
 import burp.scan.lib.web.utils.PageUtils;
-import burp.scan.passive.Confidence;
-import burp.scan.passive.CustomScanIssue;
-import okhttp3.Response;
+import burp.scan.lib.Confidence;
 
 
 import java.io.IOException;
 import java.util.*;
 
 
-public class BackupsLeak implements ModuleBase, Debug {
+public class BackupsLeak implements ModuleBase, Debug, Disable {
     static String[] FILES = {
             ".git/config",
             ".svn/entries",
@@ -45,29 +45,23 @@ public class BackupsLeak implements ModuleBase, Debug {
         filesMatches.put("debug.inc",null);
     }
 
-    boolean isFileMatch(String url,String file) {
-        GtRequest request = new GtRequest();
-        try {
-            Response response = request.get(url);
-            if (!response.isSuccessful()) {
-                return false;
-            }
-            String[] matches = filesMatches.get(file);
-            String content = response.body().string();
-            for (var match : matches) {
-                if (content.contains(match)) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    boolean isFileMatch(String file,String content) {
+        String[] matches = filesMatches.get(file);
+        if (matches == null) {
             return false;
         }
+        for (var match : matches) {
+            if (content.contains(match)) {
+                return true;
+            }
+        }
+
         return false;
     }
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
-        String url = webInfo.getUrl().trim();
+        String url = webInfo.getUrl();
+        callbacks.printOutput("URL:"+webInfo.url);
         GtURL u = new GtURL(url);
         String baseUrl = u.getFileDir();
         if (urls.contains(baseUrl)) {
@@ -78,12 +72,16 @@ public class BackupsLeak implements ModuleBase, Debug {
         IHttpService httpService = webInfo.getHttpRequestResponse().getHttpService();
         for (String FILE : filesMatches.keySet()) {
             String targetUrl = baseUrl + FILE;
+            callbacks.printOutput("target url:"+targetUrl);
             try {
-                if (isFileMatch(targetUrl,FILE)) {
-                    IScanIssue issue = new CustomScanIssue(
+                GtRequest request = new GtRequest();
+                var result = request.burpGet(targetUrl);
+                var content = new String(result.getResponse());
+                if (isFileMatch(FILE,content)) {
+                    IScanIssue issue = new RequestsInfo.CustomScanIssue(
                             httpService,
                             u.getURL(),
-                            webInfo.getHttpRequestResponse(),
+                            result,
                             "BackupsLeak",
                             "BackupFile:"+FILE,
                             "",
@@ -91,10 +89,11 @@ public class BackupsLeak implements ModuleBase, Debug {
                             Confidence.Certain
                     );
                     callbacks.addScanIssue(issue);
+                    webInfo.addIssue(issue);
                     continue;
                 }
                 if(PageUtils.isPageExist(targetUrl)) {
-                    IScanIssue issue = new CustomScanIssue(
+                    IScanIssue issue = new RequestsInfo.CustomScanIssue(
                             httpService,
                             u.getURL(),
                             webInfo.getHttpRequestResponse(),
@@ -110,5 +109,10 @@ public class BackupsLeak implements ModuleBase, Debug {
 
             }
         }
+    }
+
+    @Override
+    public Set<String> getTags() {
+        return null;
     }
 }

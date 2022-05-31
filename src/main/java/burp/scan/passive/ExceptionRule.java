@@ -1,8 +1,7 @@
 package burp.scan.passive;
 
 import burp.*;
-import burp.scan.lib.HTTPMatcher;
-import burp.scan.lib.Risk;
+import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
 
 import java.util.Arrays;
@@ -34,7 +33,7 @@ public class ExceptionRule implements PassiveRule {
             List<int[]> matchesStrutsDev = HTTPMatcher.getMatches(rawResponse, strutsDevMode, helpers);
             if (matchesStrutsDev.size() > 0) {
 
-                callbacks.addScanIssue(new CustomScanIssue(
+                callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,
@@ -62,7 +61,7 @@ public class ExceptionRule implements PassiveRule {
             List<int[]> matchesTapestry = HTTPMatcher.getMatches(rawResponse, tapestryException, helpers);
             if (matchesTapestry.size() > 0) {
 
-                callbacks.addScanIssue(new CustomScanIssue(
+                callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,
@@ -91,7 +90,7 @@ public class ExceptionRule implements PassiveRule {
             List<int[]> matchesGrails = HTTPMatcher.getMatches(rawResponse, grailsException, helpers);
             if (matchesGrails.size() > 0) {
 
-                callbacks.addScanIssue(new CustomScanIssue(
+                callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,
@@ -118,7 +117,7 @@ public class ExceptionRule implements PassiveRule {
             List<int[]> matchesGWT = HTTPMatcher.getMatches(rawResponse, gwtException, helpers);
             if (matchesGWT.size() > 0) {
 
-                callbacks.addScanIssue(new CustomScanIssue(
+                callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,
@@ -155,7 +154,7 @@ public class ExceptionRule implements PassiveRule {
                 List<int[]> matchesJavax = HTTPMatcher.getMatches(rawResponse, exc, helpers);
                 if (matchesJavax.size() > 0) {
 
-                    callbacks.addScanIssue(new CustomScanIssue(
+                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             baseRequestResponse,
@@ -190,7 +189,7 @@ public class ExceptionRule implements PassiveRule {
                 List<int[]> matchesJsf = HTTPMatcher.getMatches(rawResponse, jsfException, helpers);
                 if (matchesJsf.size() > 0) {
 
-                    callbacks.addScanIssue(new CustomScanIssue(
+                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             baseRequestResponse,

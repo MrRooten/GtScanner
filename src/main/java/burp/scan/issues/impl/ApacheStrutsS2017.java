@@ -1,11 +1,11 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -89,7 +89,7 @@ public class ApacheStrutsS2017 implements IModule {
                         }
                         if (header.substring(header.indexOf(":") + 1).trim().startsWith("http://www.example.com/")) {
 
-                            issues.add(new CustomScanIssue(
+                            issues.add(new RequestsInfo.CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     reqInfo.getUrl(),
                                     checkRequestResponse,

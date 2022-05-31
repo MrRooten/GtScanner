@@ -1,4 +1,4 @@
-package burp.scan.passive;
+package burp.scan.lib;
 
 import burp.IBurpExtenderCallbacks;
 import burp.IHttpRequestResponse;

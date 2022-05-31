@@ -1,12 +1,12 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.CustomHttpRequestResponse;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -105,7 +105,7 @@ public class ApacheStrutsS2043 implements IModule {
                         if ((matchStrutsBrowser.size() > 0)) {
                             stdout.println("Struts Browser detected " + browserUrlToTest.toString());
 
-                            issues.add(new CustomScanIssue(
+                            issues.add(new RequestsInfo.CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     browserUrlToTest,
                                     new CustomHttpRequestResponse(strutsBrowserTest, browserResponse, baseRequestResponse.getHttpService()),
@@ -168,7 +168,7 @@ public class ApacheStrutsS2043 implements IModule {
                         if ((matchStrutsBrowser.size() > 0)) {
                             stdout.println("Struts Browser detected " + browserUrlToTest.toString());
 
-                            issues.add(new CustomScanIssue(
+                            issues.add(new RequestsInfo.CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     browserUrlToTest,
                                     new CustomHttpRequestResponse(strutsBrowserTest, browserResponse, baseRequestResponse.getHttpService()),

@@ -3,10 +3,9 @@ package burp.scan.issues.impl;
 import burp.*;
 import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -193,7 +192,7 @@ public class ApacheAxis implements IModule {
                     if ((matchHappyAxis.size() > 0)) {
                         stdout.println("Happy Axis detected " + happyAxisUrlToTest.toString());
 
-                        issues.add(new CustomScanIssue(
+                        issues.add(new RequestsInfo.CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 happyAxisUrlToTest,
                                 new CustomHttpRequestResponse(happyAxisTest, happyAxisResponse, baseRequestResponse.getHttpService()),
@@ -238,7 +237,7 @@ public class ApacheAxis implements IModule {
                     if ((matcheAdminAxisLogin.size() > 0)) {
                         stdout.println("Axis2 Admin Console detected " + axisAdminUrlToTest.toString());
 
-                        issues.add(new CustomScanIssue(
+                        issues.add(new RequestsInfo.CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 axisAdminUrlToTest,
                                 new CustomHttpRequestResponse(axisAdminTest, axisAdminResponse, baseRequestResponse.getHttpService()),
@@ -255,7 +254,7 @@ public class ApacheAxis implements IModule {
 
                         if (result != null) {
                             String pwdDetail = "<br /><br />The password for the admin account is <b>" + result + "</b><br /><br /";
-                            issues.add(new CustomScanIssue(
+                            issues.add(new RequestsInfo.CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     axisAdminUrlToTest,
                                     new CustomHttpRequestResponse(axisAdminTest, axisAdminResponse, baseRequestResponse.getHttpService()),
@@ -306,7 +305,7 @@ public class ApacheAxis implements IModule {
                                     wsListDescription += "</ul><br />";
                                 }
 
-                                issues.add(new CustomScanIssue(
+                                issues.add(new RequestsInfo.CustomScanIssue(
                                         baseRequestResponse.getHttpService(),
                                         new URL(protocol, url.getHost(), url.getPort(), AXIS_PATH),
                                         new CustomHttpRequestResponse(axistest, response, baseRequestResponse.getHttpService()),
@@ -343,7 +342,7 @@ public class ApacheAxis implements IModule {
                                             GREP_STRING_AXIS_XML, helpers);
 
                                     if ((matchLFIAxis.size() > 0)) {
-                                        issues.add(new CustomScanIssue(
+                                        issues.add(new RequestsInfo.CustomScanIssue(
                                                 baseRequestResponse.getHttpService(),
                                                 axisURLLFI,
                                                 new CustomHttpRequestResponse(axisLFITest, LFIResponse, baseRequestResponse.getHttpService()),

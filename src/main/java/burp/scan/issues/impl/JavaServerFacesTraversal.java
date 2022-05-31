@@ -2,10 +2,9 @@ package burp.scan.issues.impl;
 
 import burp.*;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.*;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -146,7 +145,7 @@ public class JavaServerFacesTraversal implements IModule {
                                 jsfmessage,
                                 "web.xml");
 
-                        issues.add(new CustomScanIssue(
+                        issues.add(new RequestsInfo.CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 reqInfo.getUrl(),
                                 checkRequestResponse,

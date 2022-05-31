@@ -1,8 +1,7 @@
 package burp.scan.passive;
 
 import burp.*;
-import burp.scan.lib.HTTPParser;
-import burp.scan.lib.Risk;
+import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
 
 import java.net.URL;
@@ -65,7 +64,7 @@ public class SessionFixation implements PassiveRule {
 
                 if ((setCookieHeader == null) || (setCookieHeader != null && !setCookieHeader.contains("JSESSIONID"))) {
 
-                    callbacks.addScanIssue(new CustomScanIssue(
+                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             baseRequestResponse,

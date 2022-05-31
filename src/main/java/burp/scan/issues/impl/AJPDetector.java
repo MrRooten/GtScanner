@@ -1,13 +1,14 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
 import burp.scan.lib.CustomHttpRequestResponse;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class AJPDetector implements IModule {
                 if (CPong != null && getHex(CPong).equalsIgnoreCase("414200010900000000")) {
                     try {
                         //AJP detected
-                        issues.add(new CustomScanIssue(
+                        issues.add(new RequestsInfo.CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 new URL(url.getProtocol(), url.getHost(), port, "AJP_TCP_" + port),
                                 new CustomHttpRequestResponse(CPing, CPong, baseRequestResponse.getHttpService()),

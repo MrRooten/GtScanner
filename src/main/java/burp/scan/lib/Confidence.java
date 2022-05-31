@@ -1,4 +1,4 @@
-package burp.scan.passive;
+package burp.scan.lib;
 
 public enum Confidence {
 

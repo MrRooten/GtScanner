@@ -4,8 +4,6 @@ import burp.IBurpExtenderCallbacks;
 import burp.IExtensionHelpers;
 import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
-import burp.scan.passive.Confidence;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -63,7 +61,7 @@ public class J2EELFIRetriever {
             byte[] passwdResponse = passwdRequestResponse.getResponse();
 
             if (isEtcPasswdFile(passwdResponse, helpers)) {
-                cb.addScanIssue(new CustomScanIssue(
+                cb.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         requestInfo.getUrl(),
                         passwdRequestResponse,
@@ -88,7 +86,7 @@ public class J2EELFIRetriever {
             byte[] shadowResponse = shadowRequestResponse.getResponse();
 
             if (isEtcShadowFile(shadowResponse, helpers)) {
-                cb.addScanIssue(new CustomScanIssue(
+                cb.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         requestInfo.getUrl(),
                         shadowRequestResponse,
@@ -119,7 +117,7 @@ public class J2EELFIRetriever {
             byte[] ibmwebResponse = ibmwebRequestResponse.getResponse();
 
             if (HTTPMatcher.isIBMWebExtFileWAS7(ibmwebResponse, helpers)) {
-                cb.addScanIssue(new CustomScanIssue(
+                cb.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         requestInfo.getUrl(),
                         ibmwebRequestResponse,
@@ -146,7 +144,7 @@ public class J2EELFIRetriever {
             byte[] ibmwebResponse = ibmwebRequestResponse.getResponse();
 
             if (HTTPMatcher.isIBMWebExtFileWAS6(ibmwebResponse, helpers)) {
-                cb.addScanIssue(new CustomScanIssue(
+                cb.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         requestInfo.getUrl(),
                         ibmwebRequestResponse,
@@ -172,7 +170,7 @@ public class J2EELFIRetriever {
             byte[] ibmwebResponse = ibmwebRequestResponse.getResponse();
 
             if (isIBMWSBinding(ibmwebResponse, helpers)) {
-                cb.addScanIssue(new CustomScanIssue(
+                cb.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         requestInfo.getUrl(),
                         ibmwebRequestResponse,
@@ -197,7 +195,7 @@ public class J2EELFIRetriever {
             byte[] weblogicResponse = weblogicRequestResponse.getResponse();
 
             if (HTTPMatcher.isWebLogicFile(weblogicResponse, helpers)) {
-                cb.addScanIssue(new CustomScanIssue(
+                cb.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         requestInfo.getUrl(),
                         weblogicRequestResponse,
@@ -234,7 +232,7 @@ public class J2EELFIRetriever {
                 byte[] strutsResponse = strutsRequestResponse.getResponse();
 
                 if (isApacheStrutsConfigFile(strutsResponse, helpers)) {
-                    cb.addScanIssue(new CustomScanIssue(
+                    cb.addScanIssue(new RequestsInfo.CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             requestInfo.getUrl(),
                             strutsRequestResponse,
@@ -273,7 +271,7 @@ public class J2EELFIRetriever {
                 byte[] springResponse = springRequestResponse.getResponse();
 
                 if (isSpringContextConfigFile(springResponse, helpers)) {
-                    cb.addScanIssue(new CustomScanIssue(
+                    cb.addScanIssue(new RequestsInfo.CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             requestInfo.getUrl(),
                             springRequestResponse,

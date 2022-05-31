@@ -1,13 +1,13 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
 import burp.scan.lib.CustomHttpRequestResponse;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -153,7 +153,7 @@ public class InfrastructurePathTraversal implements IModule {
 
                         Matcher matcher = detectionRule.matcher(response);
                         if (matcher.find()) {
-                            issues.add(new CustomScanIssue(
+                            issues.add(new RequestsInfo.CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     urlToTest,
                                     new CustomHttpRequestResponse(utf8LFIAttempt, responseBytes, baseRequestResponse.getHttpService()),
@@ -245,7 +245,7 @@ public class InfrastructurePathTraversal implements IModule {
 
                             Matcher matcher = detectionRule.matcher(response);
                             if (matcher.find()) {
-                                issues.add(new CustomScanIssue(
+                                issues.add(new RequestsInfo.CustomScanIssue(
                                         baseRequestResponse.getHttpService(),
                                         urlToTest,
                                         new CustomHttpRequestResponse(utf8LFIAttempt, responseBytes, baseRequestResponse.getHttpService()),

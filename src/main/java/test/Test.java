@@ -8,18 +8,18 @@ import okhttp3.Protocol;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import me.xdrop.fuzzywuzzy.ratios.SimpleRatio;
 
 
 public class Test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MalformedURLException {
         //FingerPrintMatchRule rule = new FingerPrintMatchRule("apache-tomcat.yaml", TagTypes.Tomcat_Java);
-        try {
-            System.out.println(PageUtils.isPageExist("https://bing.com/err234324"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        var url = new URL("https://cn.bing.com/hp/api/v1/trivia?format=json&id=HPQuiz_20220530_MountFryatt&mkt=zh-CN");
+        System.out.println(url.getPort());
     }
 }

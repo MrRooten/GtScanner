@@ -1,12 +1,12 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public class ApacheRollerOGNLInjection implements IModule {
                 String rceDetails =  String.format("<br /><br />The following algorithm operation has been "
                         + "executed on the remote system:<br /><br /><strong> %d * %d = %s</strong>", firstInt, secondInt, multiplication);
                 
-                        issues.add(new CustomScanIssue(
+                        issues.add(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         checkRequestResponse,

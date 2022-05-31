@@ -2,6 +2,9 @@ package burp.scan.passive;
 
 import burp.*;
 import burp.scan.java.SoftwareVersions;
+import burp.scan.lib.Confidence;
+import burp.scan.lib.PassiveRule;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
@@ -35,7 +38,7 @@ public class ApacheTomcatRule implements PassiveRule {
                 SoftwareVersions.getIssues("Apache Tomcat", version, callbacks, baseRequestResponse);
 
                 String nistLink = "https://web.nvd.nist.gov/view/vuln/search-results?adv_search=true&cpe=cpe%3A%2Fa%3Aapache%3Atomcat%3A" + version;
-                CustomScanIssue issue = new CustomScanIssue(
+                RequestsInfo.CustomScanIssue issue = new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,
@@ -78,7 +81,7 @@ public class ApacheTomcatRule implements PassiveRule {
 
             if (matcher.find()) {
 
-                callbacks.addScanIssue(new CustomScanIssue(
+                callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,

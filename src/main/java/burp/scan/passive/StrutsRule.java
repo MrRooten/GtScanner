@@ -1,11 +1,12 @@
 package burp.scan.passive;
 
 import burp.*;
+import burp.scan.lib.PassiveRule;
 import burp.scan.lib.web.WebPageInfo;
 
 import java.nio.charset.StandardCharsets;
 
-public class StrutsRule implements PassiveRule{
+public class StrutsRule implements PassiveRule {
 
     boolean isStruts(IExtensionHelpers helpers, WebPageInfo webInfo) {
         String resBody = new String(webInfo.getResponse(), StandardCharsets.UTF_8);

@@ -4,10 +4,11 @@ import burp.IBurpExtenderCallbacks;
 import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
 import burp.IResponseInfo;
+import burp.scan.lib.PassiveRule;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
-public class ApacheRule implements PassiveRule{
+public class ApacheRule implements PassiveRule {
     public boolean isApache(String respBody) {
         if (respBody.contains("<title>Test Page for Apache Installation</title>")) {
             return true;
@@ -34,7 +35,6 @@ public class ApacheRule implements PassiveRule{
                      String contentTypeResponse,
                      String xPoweredByHeader,
                      WebPageInfo webInfo) {
-
         if (httpServerHeader!=null && httpServerHeader.toLowerCase().contains("apache")) {
             webInfo.addTag(TagTypes.ApacheHttp_Base);
         }

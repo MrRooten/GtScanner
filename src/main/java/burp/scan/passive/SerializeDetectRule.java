@@ -4,6 +4,7 @@ import burp.IBurpExtenderCallbacks;
 import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
 import burp.IResponseInfo;
+import burp.scan.lib.PassiveRule;
 import burp.scan.lib.web.WebPageInfo;
 
 public class SerializeDetectRule implements PassiveRule {

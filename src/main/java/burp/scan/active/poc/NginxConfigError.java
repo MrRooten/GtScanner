@@ -4,13 +4,16 @@ import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.GlobalFunction;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.lib.web.utils.GtURL;
-import burp.scan.passive.Confidence;
-import burp.scan.passive.CustomScanIssue;
+import burp.scan.lib.Confidence;
+import burp.scan.tags.TagTypes;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class NginxConfigError implements ModuleBase, RunOnce {
     boolean CRLFInjection(WebPageInfo webPageInfo) {
@@ -27,7 +30,7 @@ public class NginxConfigError implements ModuleBase, RunOnce {
         IResponseInfo responseInfo = GlobalFunction.helpers.analyzeResponse(baseRequestResponse.getResponse());
         List<String> headers = responseInfo.getHeaders();
         for (String header : headers) {
-            if (header.contains("a=1")) {
+            if (header.toLowerCase().startsWith("set-cookie")&&header.contains("a=1")) {
                 return true;
             }
         }
@@ -45,7 +48,7 @@ public class NginxConfigError implements ModuleBase, RunOnce {
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
         if (CRLFInjection(webInfo)) {
-            IScanIssue issue = new CustomScanIssue(
+            IScanIssue issue = new RequestsInfo.CustomScanIssue(
                     webInfo.getHttpRequestResponse().getHttpService(),
                     (new GtURL(webInfo.getUrl())).getURL(),
                     webInfo.getHttpRequestResponse(),
@@ -58,5 +61,12 @@ public class NginxConfigError implements ModuleBase, RunOnce {
             GlobalFunction.callbacks.addScanIssue(issue);
 
         }
+    }
+
+    @Override
+    public Set<String> getTags() {
+        Set<String> tags = new HashSet<>();
+        tags.add(TagTypes.Nginx_Base.toString());
+        return tags;
     }
 }

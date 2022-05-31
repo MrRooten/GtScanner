@@ -2,9 +2,9 @@ package burp.scan.lib;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.feature.Disable;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.jar.JarEntry;
@@ -24,22 +25,6 @@ import java.util.jar.JarFile;
 
 
 public class PassiveScanner {
-
-    /**
-     * List of passive rules
-     */
-    static PassiveRule[] PASSIVE_RULES = {new ApacheTomcatRule(),
-            new ExceptionRule(),
-            new HttpServerHeaderRule(),
-            new SqlQueryRule(),
-            new ApacheStrutsS2023Rule(),
-            new JettyRule(),
-            new SessionIDInURL(),
-            new JSPostMessage(),
-            new SessionFixation(),
-            new NginxRule(),
-            new ApacheRule()
-    };
 
     static List<ModuleBase> getModules() {
         List<String> modules = null;
@@ -65,7 +50,31 @@ public class PassiveScanner {
         return result;
     }
 
+    static List<PassiveRule> getPassiveModules() {
+        List<String> modules = null;
+        List<PassiveRule> result = new ArrayList<>();
+        try {
+            modules = getClassNamesFromPackage("burp.scan.passive.");
+            for (String module : modules) {
+                if (module.contains("$")) {
+                    continue;
+                }
+
+                Constructor<?> c = Class.forName("burp.scan.passive." + module).getConstructor();
+                PassiveRule gtModule = (PassiveRule) c.newInstance();
+                for (Method m : gtModule.getClass().getMethods()) {
+                    if (m.getName().equals("scan")) {
+                        result.add(gtModule);
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException | InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+            GlobalFunction.callbacks.printOutput(e.getMessage());
+        }
+        return result;
+    }
     static List<ModuleBase> ACTIVE_MODULES = getModules();
+    static List<PassiveRule> PASSIVE_RULES = getPassiveModules();
     public static ArrayList<String> getClassNamesFromPackage(String packageName) throws IOException {
         URL packageURL;
         ArrayList<String> names = new ArrayList<>();
@@ -96,6 +105,7 @@ public class PassiveScanner {
         } else {
             File folder = new File(packageURL.getFile());
             File[] contents = folder.listFiles();
+            GlobalFunction.callbacks.printOutput(contents.toString());
             String entryName;
             for (File actual : contents) {
                 entryName = actual.getCanonicalPath();
@@ -108,7 +118,7 @@ public class PassiveScanner {
     public static boolean isValidContentType(String contentTypeResponse) {
         do {
             if (contentTypeResponse == null) {
-                return false;
+                return true;
             }
 
             if (contentTypeResponse.contains("text")) {
@@ -124,50 +134,42 @@ public class PassiveScanner {
                     return true;
                 }
 
-
             }
 
-            if (contentTypeResponse.contains("image")) {
-                break;
-            }
-
-            if (contentTypeResponse.contains("audio")) {
-                break;
-            }
         }while(false);
 
         return false;
     }
-    public static void scanVulnerabilities(IHttpRequestResponse baseRequestResponse,
+    public static List<IScanIssue> scanVulnerabilities(IHttpRequestResponse baseRequestResponse,
                                            IBurpExtenderCallbacks callbacks) {
-
         IExtensionHelpers helpers = callbacks.getHelpers();
         byte[] rawRequest = baseRequestResponse.getRequest();
         byte[] rawResponse = baseRequestResponse.getResponse();
+        int MAX_SIZE = 1024*1024*5;
+        if (rawResponse.length > MAX_SIZE) {
+            return null;
+        }
 
         IRequestInfo reqInfo = helpers.analyzeRequest(baseRequestResponse);
         IResponseInfo respInfo = helpers.analyzeResponse(rawResponse);
         PrintWriter stdout = new PrintWriter(callbacks.getStdout(),true);
         //Body (without the headers)
-        String reqBody = getBodySection(rawRequest, reqInfo.getBodyOffset());
-        String respBody = getBodySection(rawResponse, respInfo.getBodyOffset());
+        String reqBody = null;
+        String respBody = null;
 
         String httpServerHeader = HTTPParser.getResponseHeaderValue(respInfo, "Server");
         String contentTypeResponse = HTTPParser.getResponseHeaderValue(respInfo, "Content-Type");
 
-        if (!isValidContentType(contentTypeResponse)) {
-            return ;
-        }
-        long MAX_SIZE = 1024 * 1024 * 1024 * 10L;
-        if (Long.parseLong(HTTPParser.getResponseHeaderValue(respInfo,"Content-Length").trim()) > MAX_SIZE) {
-            return ;
+        if (contentTypeResponse!=null && !isValidContentType(contentTypeResponse)) {
+            return null;
+        } else {
+            reqBody = getBodySection(rawRequest, reqInfo.getBodyOffset());
+            respBody = getBodySection(rawResponse, respInfo.getBodyOffset());
         }
         String xPoweredByHeader = HTTPParser.getResponseHeaderValue(respInfo, "X-Powered-By");
-        //stdout.println(reqInfo.getUrl().toString());
-        WebPageInfo webInfo = new WebPageInfo(reqInfo.getUrl().toString());
-        webInfo.setRequest(rawRequest);
-        webInfo.setResponse(rawResponse);
-        webInfo.setHttpRequestResponse(baseRequestResponse);
+        WebPageInfo webInfo = new WebPageInfo(baseRequestResponse);
+
+        callbacks.printOutput("PASSIVE_RULES length:"+PASSIVE_RULES.size());
         for(PassiveRule scanner : PASSIVE_RULES) {
             scanner.scan(callbacks,baseRequestResponse,reqBody,respBody,reqInfo,respInfo,
                     httpServerHeader,contentTypeResponse, xPoweredByHeader,webInfo);
@@ -180,9 +182,21 @@ public class PassiveScanner {
                     continue;
                 }
             }
-            module.scan(callbacks,webInfo);
-            webInfo.getSiteInfo().addRunnedModule(module);
+            Set<String> tags = module.getTags();
+            if (module.getTags()==null||webInfo.getSiteInfo().hasTags(module.getTags())) {
+                if (module instanceof Disable) {
+                    continue;
+                }
+                callbacks.printOutput("Starting:"+module.getClass().toString());
+                module.scan(callbacks, webInfo);
+                callbacks.printOutput("End:"+ module.getClass().toString());
+                webInfo.getSiteInfo().addRunnedModule(module);
+            }
+
+
         }
+
+        return webInfo.getIssues();
     }
 
 

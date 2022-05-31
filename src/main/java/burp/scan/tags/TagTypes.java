@@ -20,6 +20,8 @@ public enum TagTypes {
     Windows_Base,
     Linux_Base,
     MetaBase_Base,
+    Grafana_Base,
+    SSRF_Base,
     Tomcat_Java,
     Spring_Java,
     Struts_Java,
@@ -32,6 +34,7 @@ public enum TagTypes {
     FastJson_Java,
     Solr_Java,
     WebLogic_Java,
+    Confluence_Java,
     Flask_Python,
     Django_Python,
     Rails_Ruby,
@@ -42,9 +45,14 @@ public enum TagTypes {
     Zend_PHP,
     CakePHP_PHP,
     Symfony_PHP,
+    Zabbix_PHP,
     Node_JavaScript,
     SpringCloud_Spring,
     SpringDataCommon_Spring,
     SpringBoot_Spring,
-    PHPMyAdmin_PHP
+    PHPMyAdmin_PHP,
+
+
+
+
 };

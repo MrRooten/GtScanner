@@ -1,15 +1,11 @@
 package burp.scan.lib.web;
 
 import burp.IExtensionHelpers;
-import burp.IHttpRequestResponse;
 import burp.scan.active.ModuleBase;
-import burp.scan.lib.GlobalFunction;
-import burp.scan.tags.Tag;
 import burp.scan.tags.TagTypes;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,6 +32,13 @@ public class SiteInfo {
         return this.tags;
     }
 
+    public boolean hasTag(TagTypes tag) {
+        return this.tags.contains(tag.toString());
+    }
+
+    public boolean hasTags(Set<String> tags) {
+        return this.tags.containsAll(tags);
+    }
     public String getHost() {
         return this.host;
     }

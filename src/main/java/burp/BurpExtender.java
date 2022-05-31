@@ -2,14 +2,8 @@ package burp;
 
 import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.PassiveScanner;
-import burp.scan.lib.Risk;
-import burp.scan.passive.Confidence;
-import burp.scan.passive.CustomScanIssue;
 import burp.scan.tags.TagUtils;
 
-import java.awt.*;
-import java.io.PrintWriter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,9 +68,8 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
     public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse)
     {
         // look for matches of our passive check grep string
-        List<IScanIssue> issues = new ArrayList<>();
 
-        PassiveScanner.scanVulnerabilities(baseRequestResponse, callbacks);
+        List<IScanIssue> issues = PassiveScanner.scanVulnerabilities(baseRequestResponse, callbacks);
 
         return issues;
     }

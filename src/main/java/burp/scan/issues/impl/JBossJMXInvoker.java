@@ -2,11 +2,10 @@ package burp.scan.issues.impl;
 
 import burp.*;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
 import burp.scan.lib.*;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -98,7 +97,7 @@ public class JBossJMXInvoker implements IModule{
     
                         if (matcheInvoker.size() > 0){
 
-                            issues.add(new CustomScanIssue(
+                            issues.add(new RequestsInfo.CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     new URL(protocol, url.getHost(), url.getPort(), JBOSS_INVOKER_PATH),
                                     new CustomHttpRequestResponse(jbosstest, response, baseRequestResponse.getHttpService()),
@@ -122,7 +121,7 @@ public class JBossJMXInvoker implements IModule{
                         httpWeakPasswordResult = br.HTTPBasicBruteforce(callbacks, urlToTest);
 
                         if (httpWeakPasswordResult != null) {
-                            issues.add(new CustomScanIssue(
+                            issues.add(new RequestsInfo.CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     new URL(protocol, url.getHost(), url.getPort(), urlToTest.getPath()),
                                     httpWeakPasswordResult,

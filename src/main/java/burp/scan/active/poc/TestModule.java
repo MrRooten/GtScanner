@@ -1,19 +1,16 @@
 package burp.scan.active.poc;
 
 import burp.IBurpExtenderCallbacks;
-import burp.IHttpRequestResponse;
-import burp.IHttpService;
+import burp.IRequestInfo;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.RunOnce;
+import burp.scan.lib.RequestParser;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
 public class TestModule implements ModuleBase, RunOnce {
     ModuleMeta meta;
@@ -25,27 +22,16 @@ public class TestModule implements ModuleBase, RunOnce {
     }
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
-        List<String> headers = new ArrayList<>();
-        headers.add("GET " + "/" + " HTTP/1.1");
-        headers.add("Host: " + "www.baidu.com");
-        headers.add("Content-Type: application/x-www-form-urlencoded");
-        headers.add("Cookie: JSESSIONID=4416F53DDE1DBC8081CDBDCDD1666FB0");
-
-        String body = "actionOutcome=/success.xhtml?user%3d%23{expressions.getClass().forName('java.lang.Runtime').getDeclaredMethod('getRuntime')}";
-
-        byte[] seamMesssage = new byte[0];
-        try {
-            seamMesssage = callbacks.getHelpers().buildHttpRequest(new URL("https://www.baidu.com"));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        IRequestInfo info = callbacks.getHelpers().analyzeRequest(webInfo.getHttpRequestResponse());
+        RequestParser parser = new RequestParser(info);
+        var parameters = parser.getParameters();
+        for (var parameter : parameters) {
+            callbacks.printOutput(parameter.getName()+": "+parameter.getValue());
         }
-        callbacks.printOutput(new String(seamMesssage));
-        IHttpService httpService = callbacks.getHelpers().buildHttpService("www.baidu.com",443,true);
-        IHttpRequestResponse res = callbacks.makeHttpRequest(httpService,seamMesssage);
-        byte[] bytes = res.getResponse();
-        if (bytes == null) {
-            return ;
-        }
-        callbacks.printOutput(new String(bytes));
+    }
+
+    @Override
+    public Set<String> getTags() {
+        return null;
     }
 }

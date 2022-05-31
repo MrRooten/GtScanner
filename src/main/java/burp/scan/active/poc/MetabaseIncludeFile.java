@@ -10,6 +10,8 @@ import burp.scan.tags.TagTypes;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class MetabaseIncludeFile implements ModuleBase, RunOnce {
@@ -49,5 +51,12 @@ public class MetabaseIncludeFile implements ModuleBase, RunOnce {
         byte[] targetResponse = callbacks.makeHttpRequest(httpService,targetRequest).getResponse();
         stdout.println(targetResponse);
         return ;
+    }
+
+    @Override
+    public Set<String> getTags() {
+        Set<String> tags = new HashSet<>();
+        tags.add(TagTypes.MetaBase_Base.toString());
+        return tags;
     }
 }

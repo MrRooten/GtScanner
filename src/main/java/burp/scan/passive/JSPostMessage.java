@@ -1,6 +1,9 @@
 package burp.scan.passive;
 
 import burp.*;
+import burp.scan.lib.Confidence;
+import burp.scan.lib.PassiveRule;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 
@@ -35,7 +38,7 @@ public class JSPostMessage implements PassiveRule {
 
                 if (matcher.find()) {
 
-                    callbacks.addScanIssue(new CustomScanIssue(
+                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             baseRequestResponse,

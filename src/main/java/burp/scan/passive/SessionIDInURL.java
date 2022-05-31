@@ -1,6 +1,9 @@
 package burp.scan.passive;
 
 import burp.*;
+import burp.scan.lib.Confidence;
+import burp.scan.lib.PassiveRule;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 
@@ -43,7 +46,7 @@ public class SessionIDInURL implements PassiveRule {
         for (String identifier : SESSIONIDs) {
             
             if (curURL.toString().contains(identifier)) {
-                callbacks.addScanIssue(new CustomScanIssue(
+                callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,

@@ -1,12 +1,12 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.HTTPMatcher;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
 
 import java.net.URL;
 import java.util.*;
@@ -90,7 +90,7 @@ public class ELInjection implements IModule {
             List<int[]> matches = getMatches(checkRequestResponse.getResponse(), EL_INJECTIONS.get(INJ_TEST), helpers);
             if (matches.size() > 0) {
 
-                issues.add(new CustomScanIssue(
+                issues.add(new RequestsInfo.CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         checkRequestResponse,
@@ -112,7 +112,7 @@ public class ELInjection implements IModule {
                 baseRequestResponse.getHttpService(), checkELRequest);
 
         if (HTTPMatcher.isEtcPasswdFile(checkELRequestResponse.getResponse(), helpers)) {
-            issues.add(new CustomScanIssue(
+            issues.add(new RequestsInfo.CustomScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     checkELRequestResponse,

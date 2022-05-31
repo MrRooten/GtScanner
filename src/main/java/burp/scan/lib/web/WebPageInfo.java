@@ -1,18 +1,14 @@
 package burp.scan.lib.web;
 
-import burp.IExtensionHelpers;
 import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
+import burp.IScanIssue;
 import burp.scan.lib.GlobalFunction;
-import burp.scan.passive.CustomScanIssue;
+import burp.scan.lib.GtParameter;
+import burp.scan.lib.RequestParser;
 import burp.scan.tags.TagTypes;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /*
 * This Class is for saving passive module result
@@ -24,12 +20,11 @@ public class WebPageInfo {
     public Object extendInfo = null;
     private byte[] request;
     private byte[] response;
-    private List<CustomScanIssue> issues = new ArrayList<>();
+    private List<IScanIssue> issues = new ArrayList<>();
     private IHttpRequestResponse iHttpRequestResponse;
     private SiteInfo siteInfo;
-    public WebPageInfo(String url) {
-        this.siteInfo = SiteInfo.getSiteInfo(url);
-    }
+    private Map<Class,Object> passiveInfo = new HashMap<>();
+    private RequestParser parser;
     public void addTag(TagTypes type) {
         tags.add(type.toString());
         this.siteInfo.addTag(type);
@@ -40,6 +35,13 @@ public class WebPageInfo {
         this.siteInfo = SiteInfo.getSiteInfo(requestInfo.getUrl().toString());
         this.request = baseRequestResponse.getRequest();
         this.response = baseRequestResponse.getResponse();
+        this.iHttpRequestResponse = baseRequestResponse;
+        this.url = requestInfo.getUrl().toString();
+        this.parser = new RequestParser(GlobalFunction.helpers.analyzeRequest(this.request));
+    }
+
+    public RequestParser getParser() {
+        return this.parser;
     }
     public void setRequest(byte[] request) {
         this.request = request;
@@ -49,7 +51,7 @@ public class WebPageInfo {
         this.response = response;
     }
 
-    public void addIssue(CustomScanIssue issue) {
+    public void addIssue(IScanIssue issue) {
         this.issues.add(issue);
     }
 
@@ -90,5 +92,9 @@ public class WebPageInfo {
 
     public boolean isPageExist() {
         return false;
+    }
+
+    public List<IScanIssue> getIssues() {
+        return this.issues;
     }
 }

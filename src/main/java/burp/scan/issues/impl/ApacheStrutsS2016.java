@@ -1,11 +1,11 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -108,7 +108,7 @@ public class ApacheStrutsS2016 implements IModule {
 
                         Matcher matcher = detectionRule.matcher(response);
                         if (matcher.find()) {
-                            issues.add(new CustomScanIssue(
+                            issues.add(new RequestsInfo.CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     reqInfo.getUrl(),
                                     checkRequestResponse,
@@ -129,7 +129,7 @@ public class ApacheStrutsS2016 implements IModule {
                             Matcher matcher = detectionRule.matcher(header.toLowerCase());
 
                             if (matcher.find()) {
-                                issues.add(new CustomScanIssue(
+                                issues.add(new RequestsInfo.CustomScanIssue(
                                         baseRequestResponse.getHttpService(),
                                         reqInfo.getUrl(),
                                         checkRequestResponse,

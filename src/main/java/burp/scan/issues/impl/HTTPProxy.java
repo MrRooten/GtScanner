@@ -1,12 +1,12 @@
 package burp.scan.issues.impl;
 
 import burp.*;
+import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.passive.Confidence;
+import burp.scan.lib.Confidence;
 import burp.scan.annotation.RunOnlyOnce;
 import burp.scan.issues.IModule;
 import burp.scan.lib.Risk;
-import burp.scan.passive.CustomScanIssue;
 
 import java.io.PrintWriter;
 import java.net.URL;
@@ -73,7 +73,7 @@ public class HTTPProxy implements IModule {
                 List<int[]> matchesHTTPConnect = getMatches(responseBytesHTTPConnect, GREP_STRING, helpers);
                 if (matchesHTTPConnect.size() > 0) {
 
-                    issues.add(new CustomScanIssue(
+                    issues.add(new RequestsInfo.CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             checkRequestResponse,
@@ -98,7 +98,7 @@ public class HTTPProxy implements IModule {
                 List<int[]> matchesGETHTTPConnect = getMatches(responseBytesGETHTTPConnect, GREP_STRING, helpers);
                 if (matchesGETHTTPConnect.size() > 0) {
 
-                    issues.add(new CustomScanIssue(
+                    issues.add(new RequestsInfo.CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             checkRequestResponse,

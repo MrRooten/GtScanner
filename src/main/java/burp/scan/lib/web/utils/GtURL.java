@@ -19,7 +19,16 @@ public class GtURL {
     }
 
     public Integer getPort() {
-        return this._u.getPort();
+        int port = this._u.getPort();
+        if (port != -1) {
+            return port;
+        }
+
+        if (this._u.getProtocol().equals("https")) {
+            return 443;
+        }
+
+        return 80;
     }
 
     public String getProtocol() {
