@@ -51,8 +51,5 @@ public enum TagTypes {
     SpringDataCommon_Spring,
     SpringBoot_Spring,
     PHPMyAdmin_PHP,
-
-
-
-
+    Test_PHPMyAdmin_SpringBoot
 };

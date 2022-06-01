@@ -4,6 +4,7 @@ import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
+import burp.scan.lib.CustomScanIssue;
 import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
@@ -11,6 +12,7 @@ import burp.scan.lib.web.utils.GtRequest;
 import burp.scan.lib.web.utils.GtURL;
 import burp.scan.lib.Confidence;
 import burp.scan.tags.TagTypes;
+import burp.scan.tags.TagUtils;
 import okhttp3.Response;
 
 import java.io.IOException;
@@ -41,7 +43,7 @@ public class JettyWEBINFLeak implements ModuleBase, RunOnce {
                 }
                 String res = response.body().string();
                 if (res.contains("<web-app>")) {
-                    IScanIssue issue = new RequestsInfo.CustomScanIssue(
+                    IScanIssue issue = new CustomScanIssue(
                             webInfo.getHttpRequestResponse().getHttpService(),
                             url.getURL(),
                             webInfo.getHttpRequestResponse(),
@@ -63,7 +65,7 @@ public class JettyWEBINFLeak implements ModuleBase, RunOnce {
     @Override
     public Set<String> getTags() {
         Set<String> tags = new HashSet<>();
-        tags.add(TagTypes.Jetty_Java.toString());
+        tags.add(TagUtils.toStandardName(TagTypes.Jetty_Java));
         return tags;
     }
 }

@@ -2,10 +2,7 @@ package burp.scan.passive;
 
 
 import burp.*;
-import burp.scan.lib.Confidence;
-import burp.scan.lib.PassiveRule;
-import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.Risk;
+import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
 
 import java.util.ArrayList;
@@ -43,7 +40,7 @@ public class SqlQueryRule implements PassiveRule {
                 Matcher matcher = sqlQueryRule.matcher(helpers.urlDecode(reqBody));
 
                 if (matcher.find()) {
-                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
+                    callbacks.addScanIssue(new CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             baseRequestResponse,

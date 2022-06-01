@@ -6,6 +6,7 @@ import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.HTTPParser;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
+import burp.scan.tags.TagUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -56,7 +57,7 @@ public class MetabaseIncludeFile implements ModuleBase, RunOnce {
     @Override
     public Set<String> getTags() {
         Set<String> tags = new HashSet<>();
-        tags.add(TagTypes.MetaBase_Base.toString());
+        tags.add(TagUtils.toStandardName(TagTypes.MetaBase_Base));
         return tags;
     }
 }

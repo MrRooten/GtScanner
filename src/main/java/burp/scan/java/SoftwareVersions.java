@@ -4,6 +4,7 @@
     import burp.IExtensionHelpers;
     import burp.IHttpRequestResponse;
     import burp.IRequestInfo;
+    import burp.scan.lib.CustomScanIssue;
     import burp.scan.lib.RequestsInfo;
     import burp.scan.lib.Confidence;
     import burp.scan.lib.Risk;
@@ -41,7 +42,7 @@
                 vulnerableTomcatReleases = Arrays.asList(4, 5, 6, 8);
                 if ( vulnerableTomcatReleases.contains(Integer.parseInt(release.substring(0, 1)))) {
 
-                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
+                    callbacks.addScanIssue(new CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             requestInfo.getUrl(),
                             baseRequestResponse,
@@ -71,7 +72,7 @@
                  */
                 if ( Integer.parseInt(release.substring(0, 1)) < 9 ) {
 
-                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
+                    callbacks.addScanIssue(new CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             requestInfo.getUrl(),
                             baseRequestResponse,
@@ -98,7 +99,7 @@
                  */
                 if (release.startsWith("9.") || release.startsWith("10.1.2")) {
 
-                    callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
+                    callbacks.addScanIssue(new CustomScanIssue(
                             baseRequestResponse.getHttpService(),
                             requestInfo.getUrl(),
                             baseRequestResponse,

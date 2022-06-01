@@ -3,10 +3,7 @@ package burp.scan.active.poc;
 import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
-import burp.scan.lib.Confidence;
-import burp.scan.lib.CustomHttpRequestResponse;
-import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.Risk;
+import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
@@ -65,7 +62,7 @@ public class AJPDetector implements ModuleBase, RunOnce {
                 if (CPong != null && getHex(CPong).equalsIgnoreCase("414200010900000000")) {
                     try {
                         //AJP detected
-                        issues.add(new RequestsInfo.CustomScanIssue(
+                        issues.add(new CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 new URL(url.getProtocol(), url.getHost(), port, "AJP_TCP_" + port),
                                 new CustomHttpRequestResponse(CPing, CPong, baseRequestResponse.getHttpService()),
@@ -115,7 +112,7 @@ public class AJPDetector implements ModuleBase, RunOnce {
     @Override
     public Set<String> getTags() {
         Set<String> result = new HashSet<>();
-        result.add(TagTypes.Tomcat_Java.toString());
+        result.add("Tomcat");
         return result;
     }
 }

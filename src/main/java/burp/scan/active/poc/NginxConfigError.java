@@ -3,13 +3,11 @@ package burp.scan.active.poc;
 import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
-import burp.scan.lib.GlobalFunction;
-import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.Risk;
+import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.lib.web.utils.GtURL;
-import burp.scan.lib.Confidence;
 import burp.scan.tags.TagTypes;
+import burp.scan.tags.TagUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +46,7 @@ public class NginxConfigError implements ModuleBase, RunOnce {
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
         if (CRLFInjection(webInfo)) {
-            IScanIssue issue = new RequestsInfo.CustomScanIssue(
+            IScanIssue issue = new CustomScanIssue(
                     webInfo.getHttpRequestResponse().getHttpService(),
                     (new GtURL(webInfo.getUrl())).getURL(),
                     webInfo.getHttpRequestResponse(),
@@ -66,7 +64,7 @@ public class NginxConfigError implements ModuleBase, RunOnce {
     @Override
     public Set<String> getTags() {
         Set<String> tags = new HashSet<>();
-        tags.add(TagTypes.Nginx_Base.toString());
+        tags.add(TagUtils.toStandardName(TagTypes.Nginx_Base));
         return tags;
     }
 }

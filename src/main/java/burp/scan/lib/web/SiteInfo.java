@@ -3,6 +3,7 @@ package burp.scan.lib.web;
 import burp.IExtensionHelpers;
 import burp.scan.active.ModuleBase;
 import burp.scan.tags.TagTypes;
+import burp.scan.tags.TagUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,15 +26,36 @@ public class SiteInfo {
     }
 
     public void addTag(TagTypes tag) {
-        tags.add(tag.toString());
+        String tagString = TagUtils.toStandardName(tag);
+        tags.add(tagString);
     }
 
     public Set<String> getTags() {
         return this.tags;
     }
-
+    public Set<String> getAllTags() {
+        Set<String> allTags = new HashSet<>();
+        for (String curTag : this.tags) {
+            if (curTag.equals("Base")) {
+                continue;
+            }
+            allTags.addAll(TagUtils.GetTag(curTag).GetAncestors());
+        }
+        allTags.addAll(this.tags);
+        return allTags;
+    }
     public boolean hasTag(TagTypes tag) {
-        return this.tags.contains(tag.toString());
+        String tagString = tag.toString().split("_")[0];
+
+        Set<String> allTags = new HashSet<>();
+        for (String curTag : this.tags) {
+            allTags.addAll(TagUtils.GetTag(curTag).GetAncestors());
+        }
+
+        if (allTags.contains(tagString)) {
+            return true;
+        }
+        return false;
     }
 
     public boolean hasTags(Set<String> tags) {

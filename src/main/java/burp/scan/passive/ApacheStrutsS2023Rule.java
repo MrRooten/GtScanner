@@ -5,10 +5,7 @@ import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
 import burp.IResponseInfo;
 import burp.scan.java.strutstoken.StrutsTokenCracker;
-import burp.scan.lib.Confidence;
-import burp.scan.lib.PassiveRule;
-import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.Risk;
+import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
 
 import java.util.regex.Matcher;
@@ -40,7 +37,7 @@ public class ApacheStrutsS2023Rule implements PassiveRule {
             boolean isVulnerable = StrutsTokenCracker.testToken(tokenValue);
 
             if(isVulnerable) {
-                callbacks.addScanIssue(new RequestsInfo.CustomScanIssue(
+                callbacks.addScanIssue(new CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,

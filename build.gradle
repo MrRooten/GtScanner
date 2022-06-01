@@ -15,6 +15,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.30'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.3'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '7.0.52'
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 }
 

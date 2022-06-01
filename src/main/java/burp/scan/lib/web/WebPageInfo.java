@@ -7,6 +7,7 @@ import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.GtParameter;
 import burp.scan.lib.RequestParser;
 import burp.scan.tags.TagTypes;
+import burp.scan.tags.TagUtils;
 
 import java.util.*;
 
@@ -26,7 +27,8 @@ public class WebPageInfo {
     private Map<Class,Object> passiveInfo = new HashMap<>();
     private RequestParser parser;
     public void addTag(TagTypes type) {
-        tags.add(type.toString());
+        String typeString = TagUtils.toStandardName(type);
+        tags.add(typeString);
         this.siteInfo.addTag(type);
     }
 
@@ -55,6 +57,9 @@ public class WebPageInfo {
         this.issues.add(issue);
     }
 
+    public void addIssues(List<IScanIssue> issues) {
+        this.issues.addAll(issues);
+    }
     public byte[] getRequest() {
         return request;
     }

@@ -4,6 +4,7 @@ import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.Debug;
 import burp.scan.active.feature.Disable;
+import burp.scan.lib.CustomScanIssue;
 import burp.scan.lib.RequestsInfo;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
@@ -78,7 +79,7 @@ public class BackupsLeak implements ModuleBase, Debug, Disable {
                 var result = request.burpGet(targetUrl);
                 var content = new String(result.getResponse());
                 if (isFileMatch(FILE,content)) {
-                    IScanIssue issue = new RequestsInfo.CustomScanIssue(
+                    IScanIssue issue = new CustomScanIssue(
                             httpService,
                             u.getURL(),
                             result,
@@ -93,7 +94,7 @@ public class BackupsLeak implements ModuleBase, Debug, Disable {
                     continue;
                 }
                 if(PageUtils.isPageExist(targetUrl)) {
-                    IScanIssue issue = new RequestsInfo.CustomScanIssue(
+                    IScanIssue issue = new CustomScanIssue(
                             httpService,
                             u.getURL(),
                             webInfo.getHttpRequestResponse(),

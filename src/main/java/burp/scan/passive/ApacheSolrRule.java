@@ -1,10 +1,7 @@
 package burp.scan.passive;
 
 import burp.*;
-import burp.scan.lib.Confidence;
-import burp.scan.lib.PassiveRule;
-import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.Risk;
+import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.lib.web.utils.GtURL;
 import burp.scan.tags.TagTypes;
@@ -16,7 +13,7 @@ public class ApacheSolrRule implements PassiveRule {
         String baseUrl = u.getFileDir();
         if (baseUrl.contains("/solr/")) {
             webPageInfo.addTag(TagTypes.Solr_Java);
-            IScanIssue issue = new RequestsInfo.CustomScanIssue(
+            IScanIssue issue = new CustomScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     baseRequestResponse,

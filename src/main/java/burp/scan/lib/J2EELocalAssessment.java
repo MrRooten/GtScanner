@@ -67,7 +67,7 @@ public class J2EELocalAssessment {
                     NodeList httpMethods = doc.getElementsByTagName("http-method");
 
                     if ((httpMethods != null) && (httpMethods.getLength() >= 1)) {
-                        cb.addScanIssue(new RequestsInfo.CustomScanIssue(
+                        cb.addScanIssue(new CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 requestInfo.getUrl(),
                                 baseRequestResponse,
@@ -121,7 +121,7 @@ public class J2EELocalAssessment {
                         String value = sessionTracking.item(0).getTextContent();
                         if (value.equalsIgnoreCase("URL")) {
 
-                            cb.addScanIssue(new RequestsInfo.CustomScanIssue(
+                            cb.addScanIssue(new CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     requestInfo.getUrl(),
                                     baseRequestResponse,
@@ -167,7 +167,7 @@ public class J2EELocalAssessment {
                         }
                     }
                     if (incompleteErrorHandling) {
-                        cb.addScanIssue(new RequestsInfo.CustomScanIssue(
+                        cb.addScanIssue(new CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 requestInfo.getUrl(),
                                 baseRequestResponse,
@@ -218,7 +218,7 @@ public class J2EELocalAssessment {
                         }
                     }
                     if (incompleteErrorHandling500) {
-                        cb.addScanIssue(new RequestsInfo.CustomScanIssue(
+                        cb.addScanIssue(new CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 requestInfo.getUrl(),
                                 baseRequestResponse,
@@ -269,7 +269,7 @@ public class J2EELocalAssessment {
                         }
                     }
                     if (incompleteErrorHandling404) {
-                        cb.addScanIssue(new RequestsInfo.CustomScanIssue(
+                        cb.addScanIssue(new CustomScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 requestInfo.getUrl(),
                                 baseRequestResponse,
@@ -318,7 +318,7 @@ public class J2EELocalAssessment {
                         String value = s.getTextContent();
 
                         if (value.contains("InvokerServlet")) {
-                            cb.addScanIssue(new RequestsInfo.CustomScanIssue(
+                            cb.addScanIssue(new CustomScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     requestInfo.getUrl(),
                                     baseRequestResponse,

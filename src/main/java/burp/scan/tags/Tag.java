@@ -19,7 +19,24 @@ public class Tag {
             parents.add(parent);
         }
     }
-    public Set<Tag> GetAncestors() {
-        return null;
+
+    public Set<String> getParents() {
+        return this.parents;
+    }
+    void help(Set<String> save,Set<String> currents) {
+        if (currents.contains("Base")) {
+            return ;
+        }
+        save.addAll(currents);
+        for (var current : currents) {
+            var parents = TagUtils.GetTag(current).getParents();
+            help(save,parents);
+        }
+    }
+    public Set<String> GetAncestors() {
+        Set<String> save = new HashSet<>();
+        help(save,this.parents);
+        save.add("Base");
+        return save;
     }
 }

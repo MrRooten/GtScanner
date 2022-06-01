@@ -1,10 +1,7 @@
 package burp.scan.passive;
 
 import burp.*;
-import burp.scan.lib.Confidence;
-import burp.scan.lib.PassiveRule;
-import burp.scan.lib.RequestsInfo;
-import burp.scan.lib.Risk;
+import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
@@ -46,7 +43,7 @@ public class JettyRule implements PassiveRule {
 
 
             if (isJetty(respBody,httpServerHeader)) {
-                RequestsInfo.CustomScanIssue issue = new RequestsInfo.CustomScanIssue(
+                IScanIssue issue = new CustomScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,

@@ -1,25 +1,22 @@
 package burp.scan.passive;
 
 import burp.*;
-import burp.scan.lib.*;
+import burp.scan.lib.Confidence;
+import burp.scan.lib.CustomScanIssue;
+import burp.scan.lib.PassiveRule;
+import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
 
-public class WebLogicRule implements PassiveRule {
-    Confidence isWebLogic(String respBody) {
-        if (respBody.contains("<i>Hypertext Transfer Protocol -- HTTP/1.1</i>")) {
+public class ApacheStrutsRule implements PassiveRule {
+    Confidence levelStruts(String respBody) {
+        if (respBody.contains("content=\"Struts2 Showcase for Apache Struts Project\"")) {
             return Confidence.Certain;
         }
 
-        if (respBody.contains("/console/framework/skins/wlsconsole/images/login_WebLogic_branding.png")) {
-            return Confidence.Certain;
-        }
-
-        if (respBody.contains("Error 404--Not Found")) {
-            return Confidence.Firm;
-        }
-
-        if (respBody.contains("Error 403--")) {
+        if (respBody.contains("struts problem report") ||
+                respBody.contains("there is no action mapped for namespace") ||
+                respBody.contains("no result defined for action and result input")) {
             return Confidence.Firm;
         }
 
@@ -27,21 +24,21 @@ public class WebLogicRule implements PassiveRule {
     }
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, String reqBody, String respBody, IRequestInfo reqInfo, IResponseInfo respInfo, String httpServerHeader, String contentTypeResponse, String xPoweredByHeader, WebPageInfo webPageInfo) {
-        Confidence level = isWebLogic(respBody);
-        if(level != null) {
+        Confidence level = levelStruts(respBody);
+        if (level != null) {
             IScanIssue issue = new CustomScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     baseRequestResponse,
-                    "WebLogic Fingerprint",
-                    "Web is a WebLogic service",
+                    "Apache Struts Fingerprint",
+                    "This is running in Struts service",
                     "",
                     Risk.Information,
                     level
             );
-            webPageInfo.addTag(TagTypes.WebLogic_Java);
-            webPageInfo.addIssue(issue);
             callbacks.addScanIssue(issue);
+            webPageInfo.addIssue(issue);
+            webPageInfo.addTag(TagTypes.Struts_Java);
         }
     }
 }
