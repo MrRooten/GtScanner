@@ -78,7 +78,7 @@ public class TomcatHostManager implements ModuleBase, RunOnce {
 
                             if (responseHeaders.get(h).toLowerCase().contains("tomcat host manager")) {
 
-                                issues.add(new CustomScanIssue(
+                                issues.add(new GtScanIssue(
                                         baseRequestResponse.getHttpService(),
                                         new URL(protocol, url.getHost(), url.getPort(), TOMCAT_HOST_MANAGER_PATH),
                                         new CustomHttpRequestResponse(tomcattest, response, baseRequestResponse.getHttpService()),
@@ -95,7 +95,7 @@ public class TomcatHostManager implements ModuleBase, RunOnce {
                                 httpWeakPasswordResult = br.HTTPBasicBruteforce(callbacks, urlToTest);
 
                                 if (httpWeakPasswordResult != null) {
-                                    issues.add(new CustomScanIssue(
+                                    issues.add(new GtScanIssue(
                                             baseRequestResponse.getHttpService(),
                                             new URL(protocol, url.getHost(), url.getPort(), TOMCAT_HOST_MANAGER_PATH),
                                             httpWeakPasswordResult,

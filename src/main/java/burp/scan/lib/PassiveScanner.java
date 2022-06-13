@@ -142,6 +142,7 @@ public class PassiveScanner {
     }
     public static List<IScanIssue> scanVulnerabilities(IHttpRequestResponse baseRequestResponse,
                                            IBurpExtenderCallbacks callbacks) {
+        long startTime = System.nanoTime();
         IExtensionHelpers helpers = callbacks.getHelpers();
         byte[] rawRequest = baseRequestResponse.getRequest();
         byte[] rawResponse = baseRequestResponse.getResponse();
@@ -167,13 +168,21 @@ public class PassiveScanner {
             respBody = getBodySection(rawResponse, respInfo.getBodyOffset());
         }
         String xPoweredByHeader = HTTPParser.getResponseHeaderValue(respInfo, "X-Powered-By");
-        WebPageInfo webInfo = new WebPageInfo(baseRequestResponse);
+        WebPageInfo webInfo = new WebPageInfo(baseRequestResponse,reqBody,respBody,reqInfo,respInfo);
 
         callbacks.printOutput("PASSIVE_RULES length:"+PASSIVE_RULES.size());
         for(PassiveRule scanner : PASSIVE_RULES) {
-            scanner.scan(callbacks,baseRequestResponse,reqBody,respBody,reqInfo,respInfo,
-                    httpServerHeader,contentTypeResponse, xPoweredByHeader,webInfo);
+            try {
+                scanner.scan(callbacks, baseRequestResponse, reqBody, respBody, reqInfo, respInfo,
+                        httpServerHeader, contentTypeResponse, xPoweredByHeader, webInfo);
+            } catch (Exception e) {
+                callbacks.printError(e.getMessage());
+            }
         }
+
+        long endTime   = System.nanoTime();
+        long totalTime = endTime - startTime;
+        callbacks.printOutput("Passive Page Cost Time:"+totalTime);
         stdout.println(webInfo.getSiteInfo().getHost() + ":" + webInfo.getSiteInfo().getTags().toString());
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (ModuleBase module : ACTIVE_MODULES) {
@@ -188,7 +197,11 @@ public class PassiveScanner {
                     continue;
                 }
                 callbacks.printOutput("Starting:"+module.getClass().toString());
-                module.scan(callbacks, webInfo);
+                try {
+                    module.scan(callbacks, webInfo);
+                } catch (Exception e) {
+                    callbacks.printError(e.getLocalizedMessage());
+                }
                 callbacks.printOutput("End:"+ module.getClass().toString());
                 webInfo.getSiteInfo().addRunnedModule(module);
             }

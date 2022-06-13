@@ -5,7 +5,7 @@ import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.CustomHttpRequestResponse;
-import burp.scan.lib.CustomScanIssue;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
@@ -86,7 +86,7 @@ public class WeblogicWebServiceTestPageCVE20182894 implements ModuleBase, RunOnc
                             List<int[]> matches = getMatches(response, GREP_STRING, helpers);
 
                             if (matches.size() > 0) {
-                                issues.add(new CustomScanIssue(
+                                issues.add(new GtScanIssue(
                                         baseRequestResponse.getHttpService(),
                                         reqInfo.getUrl(),
                                         new CustomHttpRequestResponse(udditest, response, baseRequestResponse.getHttpService()),

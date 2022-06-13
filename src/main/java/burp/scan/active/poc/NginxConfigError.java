@@ -46,7 +46,7 @@ public class NginxConfigError implements ModuleBase, RunOnce {
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
         if (CRLFInjection(webInfo)) {
-            IScanIssue issue = new CustomScanIssue(
+            IScanIssue issue = new GtScanIssue(
                     webInfo.getHttpRequestResponse().getHttpService(),
                     (new GtURL(webInfo.getUrl())).getURL(),
                     webInfo.getHttpRequestResponse(),

@@ -86,7 +86,7 @@ public class StatusServlet implements ModuleBase, RunOnce {
                      */
                     if (statusInfo.getStatusCode() == 401) {
 
-                        issues.add(new CustomScanIssue(
+                        issues.add(new GtScanIssue(
                                 baseRequestResponse.getHttpService(),
                                 urlToTest,
                                 new CustomHttpRequestResponse(statustest, responseBytes, baseRequestResponse.getHttpService()),
@@ -120,7 +120,7 @@ public class StatusServlet implements ModuleBase, RunOnce {
                                         + "<b>%s</b><br /><br />", weakCredential);
                             }
 
-                            issues.add(new CustomScanIssue(
+                            issues.add(new GtScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     urlToTest,
                                     httpWeakPasswordResult,
@@ -140,7 +140,7 @@ public class StatusServlet implements ModuleBase, RunOnce {
                         List<int[]> matches_j2ee = getMatches(responseBytes, GREP_STRING_J2EE, helpers);
                         if (matches_j2ee.size() > 0) {
 
-                            issues.add(new CustomScanIssue(
+                            issues.add(new GtScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     reqInfo.getUrl(),
                                     new CustomHttpRequestResponse(statustest, responseBytes, baseRequestResponse.getHttpService()),
@@ -158,7 +158,7 @@ public class StatusServlet implements ModuleBase, RunOnce {
                         List<int[]> matches_httpd = getMatches(responseBytes, GREP_STRING_HTTPD, helpers);
                         if (matches_httpd.size() > 0) {
 
-                            issues.add(new CustomScanIssue(
+                            issues.add(new GtScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     reqInfo.getUrl(),
                                     new CustomHttpRequestResponse(statustest, responseBytes, baseRequestResponse.getHttpService()),

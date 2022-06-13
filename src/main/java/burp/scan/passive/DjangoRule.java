@@ -17,7 +17,7 @@ public class DjangoRule implements PassiveRule {
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, String reqBody, String respBody, IRequestInfo reqInfo, IResponseInfo respInfo, String httpServerHeader, String contentTypeResponse, String xPoweredByHeader, WebPageInfo webPageInfo) {
         if (isDjango(respBody)) {
-            IScanIssue issue = new CustomScanIssue(
+            IScanIssue issue = new GtScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     baseRequestResponse,

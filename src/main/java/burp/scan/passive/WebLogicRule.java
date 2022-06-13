@@ -29,7 +29,7 @@ public class WebLogicRule implements PassiveRule {
     public void scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, String reqBody, String respBody, IRequestInfo reqInfo, IResponseInfo respInfo, String httpServerHeader, String contentTypeResponse, String xPoweredByHeader, WebPageInfo webPageInfo) {
         Confidence level = isWebLogic(respBody);
         if(level != null) {
-            IScanIssue issue = new CustomScanIssue(
+            IScanIssue issue = new GtScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     baseRequestResponse,

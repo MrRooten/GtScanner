@@ -3,7 +3,7 @@ package burp.scan.active.poc;
 import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.lib.Confidence;
-import burp.scan.lib.CustomScanIssue;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 
@@ -73,7 +73,7 @@ public class ApacheRollerOGNLInjection implements ModuleBase {
                 String rceDetails =  String.format("<br /><br />The following algorithm operation has been "
                         + "executed on the remote system:<br /><br /><strong> %d * %d = %s</strong>", firstInt, secondInt, multiplication);
 
-                issues.add(new CustomScanIssue(
+                issues.add(new GtScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         checkRequestResponse,

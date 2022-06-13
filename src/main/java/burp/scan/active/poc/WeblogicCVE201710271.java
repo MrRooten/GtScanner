@@ -4,7 +4,7 @@ import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
-import burp.scan.lib.CustomScanIssue;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
@@ -102,7 +102,7 @@ public class WeblogicCVE201710271 implements ModuleBase, RunOnce {
                 List<IBurpCollaboratorInteraction> collaboratorInteractions = collaboratorContext.fetchCollaboratorInteractionsFor(currentCollaboratorPayload);
 
                 if (!collaboratorInteractions.isEmpty()) {
-                    issues.add(new CustomScanIssue(
+                    issues.add(new GtScanIssue(
                             baseRequestResponse.getHttpService(),
                             helpers.analyzeRequest(baseRequestResponse).getUrl(),
                             resp,

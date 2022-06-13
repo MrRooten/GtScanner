@@ -7,7 +7,7 @@ import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.CustomHttpRequestResponse;
-import burp.scan.lib.CustomScanIssue;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
@@ -108,7 +108,7 @@ public class SpringCloudConfigPathTraversal implements ModuleBase {
 
                         Matcher matcher = detectionRule.matcher(response);
                         if (matcher.find()) {
-                            issues.add(new CustomScanIssue(
+                            issues.add(new GtScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     urlToTest,
                                     new CustomHttpRequestResponse(utf8LFIAttempt, responseBytes, baseRequestResponse.getHttpService()),

@@ -43,7 +43,7 @@ public class SessionIDInURL implements PassiveRule {
         for (String identifier : SESSIONIDs) {
             
             if (curURL.toString().contains(identifier)) {
-                callbacks.addScanIssue(new CustomScanIssue(
+                callbacks.addScanIssue(new GtScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,

@@ -4,7 +4,7 @@ import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
-import burp.scan.lib.CustomScanIssue;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.HTTPParser;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
@@ -92,7 +92,7 @@ public class SpringBootRestRCE implements ModuleBase, RunOnce {
             List<IBurpCollaboratorInteraction> collaboratorInteractions = collaboratorContext.fetchCollaboratorInteractionsFor(currentCollaboratorPayload);
 
             if (!collaboratorInteractions.isEmpty()) {
-                issues.add(new CustomScanIssue(
+                issues.add(new GtScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         resp,

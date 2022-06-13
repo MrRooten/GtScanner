@@ -13,7 +13,7 @@ public class ApacheSolrRule implements PassiveRule {
         String baseUrl = u.getFileDir();
         if (baseUrl.contains("/solr/")) {
             webPageInfo.addTag(TagTypes.Solr_Java);
-            IScanIssue issue = new CustomScanIssue(
+            IScanIssue issue = new GtScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     baseRequestResponse,

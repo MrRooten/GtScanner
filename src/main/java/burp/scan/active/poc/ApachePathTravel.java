@@ -4,13 +4,11 @@ import burp.IBurpExtenderCallbacks;
 import burp.IResponseInfo;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
-import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
-import burp.scan.lib.CustomScanIssue;
-import burp.scan.lib.RequestsInfo;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.lib.web.utils.GtRequest;
+import burp.scan.lib.web.utils.GtSession;
 import burp.scan.lib.web.utils.GtURL;
 import burp.scan.tags.TagTypes;
 import burp.scan.tags.TagUtils;
@@ -36,7 +34,7 @@ public class ApachePathTravel implements ModuleBase {
         }
         webInfo.getSiteInfo().addRunnedModule(this);
         String dirUrl = u.getFileDir();
-        GtRequest request = new GtRequest();
+        GtSession request = new GtSession();
         for (var payload : PAYLOADS ) {
             String targetUrl = dirUrl + payload;
             try {
@@ -46,7 +44,7 @@ public class ApachePathTravel implements ModuleBase {
                 int bodyOffset = respInfo.getBodyOffset();
                 String respBody = new String(respBytes, bodyOffset, respBytes.length - bodyOffset);
                 if (respBody.contains("/root:/bin/bash")||respBody.contains("root:x:")) {
-                    IScanIssue issue = new CustomScanIssue(
+                    IScanIssue issue = new GtScanIssue(
                             result.getHttpService(),
                             new GtURL(targetUrl).getURL(),
                             result,

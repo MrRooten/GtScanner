@@ -14,16 +14,16 @@ public class ReversePocClient {
         context = GlobalFunction.callbacks.createBurpCollaboratorClientContext();
     }
 
-    String getPayload() {
+    public String getPayload() {
         payload = context.generatePayload(true);
         return payload;
     }
 
-    List<PocResult> getResults() {
+    public List<PocResult> getResults() {
         List<IBurpCollaboratorInteraction> collaboratorInteractions = context.fetchCollaboratorInteractionsFor(payload);
         List<PocResult> results = new ArrayList<>();
         for (var interaction : collaboratorInteractions) {
-            results.add(new PocResult(interaction));
+            results.add(new PocResult(interaction,payload));
         }
         return results;
     }

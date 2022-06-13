@@ -37,7 +37,7 @@ public class ApacheStrutsS2023Rule implements PassiveRule {
             boolean isVulnerable = StrutsTokenCracker.testToken(tokenValue);
 
             if(isVulnerable) {
-                callbacks.addScanIssue(new CustomScanIssue(
+                callbacks.addScanIssue(new GtScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,

@@ -4,11 +4,10 @@ import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.Debug;
 import burp.scan.active.feature.Disable;
-import burp.scan.lib.CustomScanIssue;
-import burp.scan.lib.RequestsInfo;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
-import burp.scan.lib.web.utils.GtRequest;
+import burp.scan.lib.web.utils.GtSession;
 import burp.scan.lib.web.utils.GtURL;
 import burp.scan.lib.web.utils.PageUtils;
 import burp.scan.lib.Confidence;
@@ -75,11 +74,11 @@ public class BackupsLeak implements ModuleBase, Debug, Disable {
             String targetUrl = baseUrl + FILE;
             callbacks.printOutput("target url:"+targetUrl);
             try {
-                GtRequest request = new GtRequest();
+                GtSession request = new GtSession();
                 var result = request.burpGet(targetUrl);
                 var content = new String(result.getResponse());
                 if (isFileMatch(FILE,content)) {
-                    IScanIssue issue = new CustomScanIssue(
+                    IScanIssue issue = new GtScanIssue(
                             httpService,
                             u.getURL(),
                             result,
@@ -94,7 +93,7 @@ public class BackupsLeak implements ModuleBase, Debug, Disable {
                     continue;
                 }
                 if(PageUtils.isPageExist(targetUrl)) {
-                    IScanIssue issue = new CustomScanIssue(
+                    IScanIssue issue = new GtScanIssue(
                             httpService,
                             u.getURL(),
                             webInfo.getHttpRequestResponse(),

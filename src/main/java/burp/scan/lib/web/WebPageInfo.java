@@ -2,10 +2,10 @@ package burp.scan.lib.web;
 
 import burp.IHttpRequestResponse;
 import burp.IRequestInfo;
+import burp.IResponseInfo;
 import burp.IScanIssue;
 import burp.scan.lib.GlobalFunction;
-import burp.scan.lib.GtParameter;
-import burp.scan.lib.RequestParser;
+import burp.scan.lib.RequestInfoParser;
 import burp.scan.tags.TagTypes;
 import burp.scan.tags.TagUtils;
 
@@ -25,7 +25,11 @@ public class WebPageInfo {
     private IHttpRequestResponse iHttpRequestResponse;
     private SiteInfo siteInfo;
     private Map<Class,Object> passiveInfo = new HashMap<>();
-    private RequestParser parser;
+    private RequestInfoParser parser;
+    private String reqBody;
+    private String respBody;
+    private IRequestInfo reqInfo;
+    private IResponseInfo respInfo;
     public void addTag(TagTypes type) {
         String typeString = TagUtils.toStandardName(type);
         tags.add(typeString);
@@ -39,12 +43,42 @@ public class WebPageInfo {
         this.response = baseRequestResponse.getResponse();
         this.iHttpRequestResponse = baseRequestResponse;
         this.url = requestInfo.getUrl().toString();
-        this.parser = new RequestParser(GlobalFunction.helpers.analyzeRequest(this.request));
+        this.parser = new RequestInfoParser(GlobalFunction.helpers.analyzeRequest(this.request));
     }
 
-    public RequestParser getParser() {
+    public WebPageInfo(IHttpRequestResponse baseRequestResponse,String reqBody,String respBody,IRequestInfo reqInfo,IResponseInfo respInfo) {
+        IRequestInfo requestInfo = GlobalFunction.helpers.analyzeRequest(baseRequestResponse);
+        this.siteInfo = SiteInfo.getSiteInfo(requestInfo.getUrl().toString());
+        this.request = baseRequestResponse.getRequest();
+        this.response = baseRequestResponse.getResponse();
+        this.iHttpRequestResponse = baseRequestResponse;
+        this.url = requestInfo.getUrl().toString();
+        this.parser = new RequestInfoParser(GlobalFunction.helpers.analyzeRequest(this.request));
+        this.reqBody = reqBody;
+        this.respBody = respBody;
+        this.reqInfo = reqInfo;
+        this.respInfo = respInfo;
+    }
+    public String getReqBody() {
+        return this.reqBody;
+    }
+
+    public String getRespBody() {
+        return this.respBody;
+    }
+
+    public IRequestInfo getReqInfo() {
+        return this.reqInfo;
+    }
+
+    public IResponseInfo getRespInfo() {
+        return this.respInfo;
+    }
+
+    public RequestInfoParser getParser() {
         return this.parser;
     }
+
     public void setRequest(byte[] request) {
         this.request = request;
     }

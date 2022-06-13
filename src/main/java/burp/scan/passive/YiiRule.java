@@ -9,7 +9,7 @@ public class YiiRule implements PassiveRule {
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, IHttpRequestResponse baseRequestResponse, String reqBody, String respBody, IRequestInfo reqInfo, IResponseInfo respInfo, String httpServerHeader, String contentTypeResponse, String xPoweredByHeader, WebPageInfo webPageInfo) {
         if (respBody.contains("yii_csrf_token")) {
-            IScanIssue issue = new CustomScanIssue(
+            IScanIssue issue = new GtScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     baseRequestResponse,

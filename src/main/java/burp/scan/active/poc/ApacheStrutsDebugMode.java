@@ -4,7 +4,7 @@ import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
-import burp.scan.lib.CustomScanIssue;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
@@ -79,7 +79,7 @@ public class ApacheStrutsDebugMode implements ModuleBase, RunOnce {
 
         if (matches.size() > 0) {
 
-            issues.add(new CustomScanIssue(
+            issues.add(new GtScanIssue(
                     baseRequestResponse.getHttpService(),
                     reqInfo.getUrl(),
                     checkRequestResponse,

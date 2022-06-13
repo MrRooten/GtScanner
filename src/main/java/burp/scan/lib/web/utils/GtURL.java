@@ -14,10 +14,26 @@ public class GtURL {
         }
     }
 
-    public String getHost() {
-        return this._u.getHost();
+    public String getHostNormal() {
+        String result = "";
+        if (this.isHttps() && this._u.getPort() == 443) {
+            result = this._u.getHost();
+        } else if (!this.isHttps() && this._u.getPort() == 80) {
+            result = this._u.getHost();
+        } else {
+            result = this._u.getHost() + ":" + this._u.getPort();
+        }
+
+        return result;
     }
 
+    public String getHost() {
+        return this._u.getHost() + ":"+this._u.getPort();
+    }
+
+    public String getHostWithoutPort() {
+        return this._u.getHost();
+    }
     public Integer getPort() {
         int port = this._u.getPort();
         if (port != -1) {
@@ -32,7 +48,7 @@ public class GtURL {
     }
 
     public String getProtocol() {
-        return this._u.getProtocol();
+        return this.url.substring(0,this.url.indexOf(":"));
     }
 
     public String getUrl() {
@@ -52,12 +68,23 @@ public class GtURL {
     }
 
     public String getFileDir() {
-        if (this.url.endsWith("/")) {
+        int queryMark = this.url.indexOf("?");
+        String url = null;
+        if (queryMark == -1) {
+            url = this.url;
+        } else {
+            url = this.url.substring(0, this.url.indexOf("?"));
+        }
+        if (url.endsWith("/")) {
             return this.url;
         }
 
-        int lastSlash = this.url.lastIndexOf("/");
-        return this.url.substring(0,lastSlash+1);
+        int lastSlash = url.lastIndexOf("/");
+        return url.substring(0,lastSlash+1);
+    }
+
+    public String getUrlWithoutQuery() {
+        return this.url.substring(0,this.url.indexOf("?"));
     }
 
     public String getFile() {
@@ -66,5 +93,13 @@ public class GtURL {
 
     public java.net.URL getURL() {
         return this._u;
+    }
+
+    public boolean isHttps() {
+        if (this.getProtocol().equalsIgnoreCase("https")) {
+            return true;
+        }
+
+        return false;
     }
 }

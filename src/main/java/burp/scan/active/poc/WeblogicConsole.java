@@ -133,7 +133,7 @@ public class WeblogicConsole implements ModuleBase, RunOnce {
                         for (byte[] GREP_WEBLOGIC_STRING : GREP_WEBLOGIC_STRINGS) {
                             List<int[]> matches_weblogic = getMatches(response, GREP_WEBLOGIC_STRING, helpers);
                             if (matches_weblogic.size() > 0) {
-                                issues.add(new CustomScanIssue(
+                                issues.add(new GtScanIssue(
                                         baseRequestResponse.getHttpService(),
                                         helpers.analyzeRequest(baseRequestResponse).getUrl(),
                                         new CustomHttpRequestResponse(weblogictest, response, baseRequestResponse.getHttpService()),
@@ -148,7 +148,7 @@ public class WeblogicConsole implements ModuleBase, RunOnce {
                                 // There isn't a default password for the console
                                 String result = weblogicAdminBruteforcer(urlToTest, callbacks, baseRequestResponse);
                                 if (result != null) {
-                                    issues.add(new CustomScanIssue(
+                                    issues.add(new GtScanIssue(
                                             baseRequestResponse.getHttpService(),
                                             helpers.analyzeRequest(baseRequestResponse).getUrl(),
                                             new CustomHttpRequestResponse(weblogictest, response, baseRequestResponse.getHttpService()),

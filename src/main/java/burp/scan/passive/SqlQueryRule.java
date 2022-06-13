@@ -40,7 +40,7 @@ public class SqlQueryRule implements PassiveRule {
                 Matcher matcher = sqlQueryRule.matcher(helpers.urlDecode(reqBody));
 
                 if (matcher.find()) {
-                    callbacks.addScanIssue(new CustomScanIssue(
+                    callbacks.addScanIssue(new GtScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             baseRequestResponse,

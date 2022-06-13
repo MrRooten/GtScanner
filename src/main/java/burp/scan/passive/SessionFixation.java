@@ -64,7 +64,7 @@ public class SessionFixation implements PassiveRule {
 
                 if ((setCookieHeader == null) || (setCookieHeader != null && !setCookieHeader.contains("JSESSIONID"))) {
 
-                    callbacks.addScanIssue(new CustomScanIssue(
+                    callbacks.addScanIssue(new GtScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             baseRequestResponse,

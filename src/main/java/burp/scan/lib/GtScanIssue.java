@@ -6,7 +6,7 @@ import burp.IScanIssue;
 
 import java.net.URL;
 
-public class CustomScanIssue implements IScanIssue {
+public class GtScanIssue implements IScanIssue {
 
     private IHttpService httpService;
     private URL url;
@@ -16,8 +16,7 @@ public class CustomScanIssue implements IScanIssue {
     private Risk severity;
     private String remedy;
     private Confidence confidence = Confidence.Certain;
-
-    public CustomScanIssue(
+    public GtScanIssue(
             IHttpService httpService,
             URL url,
             IHttpRequestResponse httpMessages,
@@ -35,6 +34,7 @@ public class CustomScanIssue implements IScanIssue {
         this.severity = severity;
         this.confidence = confidence;
     }
+
 
     @Override
     public URL getUrl() {

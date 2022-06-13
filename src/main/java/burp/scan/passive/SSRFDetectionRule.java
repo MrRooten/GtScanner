@@ -18,7 +18,7 @@ public class SSRFDetectionRule implements PassiveRule {
         for (var parameter : parameters) {
             Matcher matcher = pattern.matcher(parameter.getValue());
             if (matcher.find()) {
-                IScanIssue issue = new CustomScanIssue(
+                IScanIssue issue = new GtScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,

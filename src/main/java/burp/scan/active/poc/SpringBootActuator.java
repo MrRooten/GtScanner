@@ -4,7 +4,7 @@ import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
-import burp.scan.lib.CustomScanIssue;
+import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.tags.TagTypes;
@@ -109,7 +109,7 @@ public class SpringBootActuator implements ModuleBase, RunOnce {
                         List<int[]> matches = getMatches(requestResponse, GREP_STRING, helpers);
                         if (matches.size() > 0) {
 
-                            callbacks.addScanIssue(new CustomScanIssue(
+                            callbacks.addScanIssue(new GtScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     urlToTest,
                                     checkRequestResponse,
@@ -169,7 +169,7 @@ public class SpringBootActuator implements ModuleBase, RunOnce {
                         List<int[]> matches = getMatches(requestResponse, GREP_STRING, helpers);
                         if (matches.size() > 0) {
 
-                            callbacks.addScanIssue(new CustomScanIssue(
+                            callbacks.addScanIssue(new GtScanIssue(
                                     baseRequestResponse.getHttpService(),
                                     urlToTest,
                                     checkRequestResponse,

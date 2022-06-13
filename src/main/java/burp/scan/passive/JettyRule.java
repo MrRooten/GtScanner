@@ -43,7 +43,7 @@ public class JettyRule implements PassiveRule {
 
 
             if (isJetty(respBody,httpServerHeader)) {
-                IScanIssue issue = new CustomScanIssue(
+                IScanIssue issue = new GtScanIssue(
                         baseRequestResponse.getHttpService(),
                         reqInfo.getUrl(),
                         baseRequestResponse,

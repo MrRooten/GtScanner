@@ -35,7 +35,7 @@ public class JSPostMessage implements PassiveRule {
 
                 if (matcher.find()) {
 
-                    callbacks.addScanIssue(new CustomScanIssue(
+                    callbacks.addScanIssue(new GtScanIssue(
                             baseRequestResponse.getHttpService(),
                             reqInfo.getUrl(),
                             baseRequestResponse,
