@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.feature.Disable;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.active.feature.risk.HighRisk;
 import burp.scan.lib.*;
@@ -19,7 +20,7 @@ import static burp.scan.lib.HTTPMatcher.getApplicationContext;
 import static burp.scan.lib.HTTPMatcher.getMatches;
 import static burp.scan.lib.J2EELocalAssessment.analyzeWEBXML;
 
-public class AJP_Tomcat_GhostCat implements ModuleBase, RunOnce, HighRisk {
+public class AJP_Tomcat_GhostCat implements ModuleBase, RunOnce, HighRisk, Disable {
     private static final String TITLE = "AJP Tomcat GhostCat - CVE-2020-1938";
     private static final String DESCRIPTION = "J2EEScan identified a file inclusion vulnerability in the AJP connector in Apache Tomcat. <br />"
             + "A remote unauthenticated attacker could read web application files from the remote server. <br />"

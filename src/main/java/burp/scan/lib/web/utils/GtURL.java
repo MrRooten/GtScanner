@@ -16,9 +16,9 @@ public class GtURL {
 
     public String getHostNormal() {
         String result = "";
-        if (this.isHttps() && this._u.getPort() == 443) {
+        if (this.isHttps() && this.getPort() == 443) {
             result = this._u.getHost();
-        } else if (!this.isHttps() && this._u.getPort() == 80) {
+        } else if (!this.isHttps() && this.getPort() == 80) {
             result = this._u.getHost();
         } else {
             result = this._u.getHost() + ":" + this._u.getPort();
@@ -28,7 +28,7 @@ public class GtURL {
     }
 
     public String getHost() {
-        return this._u.getHost() + ":"+this._u.getPort();
+        return this._u.getHost() + ":"+this.getPort();
     }
 
     public String getHostWithoutPort() {

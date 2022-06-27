@@ -2,10 +2,13 @@ package burp;
 
 import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.PassiveScanner;
+import burp.scan.lib.fingerprinthub.FingerPrint;
+import burp.scan.lib.utils.Utils;
 import burp.scan.tags.TagUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class BurpExtender implements IBurpExtender, IScannerCheck
 {
@@ -39,6 +42,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
 
         GlobalFunction.callbacks = callbacks;
         GlobalFunction.helpers = callbacks.getHelpers();
+        FingerPrint.InitializeFingerPrints();
     }
 
     // helper method to search a response for occurrences of a literal match string

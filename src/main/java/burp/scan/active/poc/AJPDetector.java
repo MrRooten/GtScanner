@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.feature.Disable;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.active.feature.risk.HighRisk;
 import burp.scan.lib.*;
@@ -17,7 +18,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.*;
 
-public class AJPDetector implements ModuleBase, RunOnce, HighRisk {
+public class AJPDetector implements ModuleBase, RunOnce, HighRisk, Disable {
     private static final String TITLE = "Apache JServ Protocol (AJP) detected";
     private static final String DESCRIPTION = "J2EEscan has identified a service using the Apache JServ Protocol (AJP), exposed via TCP port ";
     private static final String REMEDY = "This issue does not constitute a security issue by itself. However, a misconfigured"

@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.feature.Disable;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
 
-public class Test implements ModuleBase {
+public class Test implements ModuleBase, Disable {
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
         String url = webInfo.getUrl();

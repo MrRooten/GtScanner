@@ -26,7 +26,7 @@ public class TomcatHostManager implements ModuleBase, RunOnce {
     private PrintWriter stderr;
 
     private static final List<String> TOMCAT_HOST_MANAGER_PATHS = Arrays.asList(
-            "/host-manager/html?j2eescan"
+            "/host-manager/html?scan"
     );
 
     @Override

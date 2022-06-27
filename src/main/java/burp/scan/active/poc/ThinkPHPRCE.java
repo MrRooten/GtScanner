@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.IBurpExtenderCallbacks;
 import burp.IHttpRequestResponse;
+import burp.IRequestInfo;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
 import burp.scan.lib.Confidence;
@@ -9,6 +10,7 @@ import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.utils.php.PageInfo;
 import burp.scan.lib.web.WebPageInfo;
+import burp.scan.lib.web.utils.GtRequest;
 import burp.scan.lib.web.utils.GtSession;
 import burp.scan.lib.web.utils.GtURL;
 import burp.scan.tags.TagTypes;
@@ -27,18 +29,19 @@ public class ThinkPHPRCE implements ModuleBase {
         String url = webInfo.getUrl();
         GtURL u = new GtURL(url);
         String baseUrl = u.getUrlWithoutQuery();
-        GtSession request = new GtSession();
+        GtSession session = GtSession.getGlobalSession();
         for (var payload : PAYLOADS) {
             String targetUrl = baseUrl + payload;
             try {
-                IHttpRequestResponse baseRequestResponse = request.burpGet(targetUrl);
-                String respBody = new String(baseRequestResponse.getResponse());
+                GtRequest request = new GtRequest(targetUrl);
+                var response = session.sendRequest(request);
+                String respBody = new String(response.getBody());
                 PageInfo pageInfo = new PageInfo(respBody);
                 if (pageInfo.isPHPInfo()) {
                     IScanIssue issue = new GtScanIssue(
-                            baseRequestResponse.getHttpService(),
+                            response.getRequestResponse().getHttpService(),
                             new URL(targetUrl),
-                            baseRequestResponse,
+                            response.getRequestResponse(),
                             "ThinkPHP RCE",
                             "ThinkPHP is an extremely widely used PHP development framework in China. In its version 5, as the framework processes controller name incorrectly, it can execute any method if the website doesn't have mandatory routing enabled (which is default), resulting in a RCE vulnerability.\n" +
                                     "\n" +

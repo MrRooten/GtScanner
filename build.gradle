@@ -5,8 +5,8 @@ repositories {
     mavenCentral()
 }
 mainClassName = 'burp/BurpExtender'
-targetCompatibility = '1.11'
-sourceCompatibility = '1.11'
+targetCompatibility = '1.17'
+sourceCompatibility = '1.17'
 
 dependencies {
     implementation 'net.portswigger.burp.extender:burp-extender-api:2.3'
@@ -17,6 +17,10 @@ dependencies {
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.3'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '7.0.52'
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation 'org.json:json:20220320'
 }
 
 sourceSets {
@@ -25,15 +29,18 @@ sourceSets {
             srcDir 'src'
         }
         resources {
-            srcDir 'resources'
+            srcDir 'src/main/resources'
         }
     }
 }
-
+processResources {
+    duplicatesStrategy = 'include'
+}
 task fatJar(type: Jar) {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
     baseName = project.name + '-all'
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from {
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
 test {

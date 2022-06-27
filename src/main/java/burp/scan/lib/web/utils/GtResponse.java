@@ -1,15 +1,16 @@
 package burp.scan.lib.web.utils;
 
+import burp.IHttpRequestResponse;
+import burp.IRequestInfo;
+import burp.IResponseInfo;
+import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.utils.GtHttpRequestResponse;
 import burp.scan.lib.utils.GtHttpService;
 import okhttp3.Protocol;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GtResponse {
     static Map<Integer,String> statusCodeMeaning = new HashMap<>();
@@ -87,6 +88,10 @@ public class GtResponse {
     Response response;
     Exception exception;
     GtHttpRequestResponse httpRequestResponse;
+    IHttpRequestResponse burpRequestResponse;
+    IRequestInfo burpReqInfo;
+    IResponseInfo burpRespInfo;
+    boolean isBurp = false;
     public byte[] getResponse() {
         return null;
     }
@@ -113,6 +118,13 @@ public class GtResponse {
         this.response = response;
     }
 
+    public GtResponse(IHttpRequestResponse requestResponse) {
+        this.burpRequestResponse = requestResponse;
+        this.burpReqInfo = GlobalFunction.helpers.analyzeRequest(requestResponse);
+        this.burpRespInfo = GlobalFunction.helpers.analyzeResponse(requestResponse.getResponse());
+        this.isBurp = true;
+    }
+
     public GtResponse(GtRequest request,Response response) {
         this.request = request;
         this.response = response;
@@ -126,6 +138,9 @@ public class GtResponse {
     }
 
     public int getStatudCode() {
+        if (isBurp) {
+            return this.burpRespInfo.getStatusCode();
+        }
         return this.response.code();
     }
 
@@ -133,11 +148,20 @@ public class GtResponse {
         if (body != null) {
             return body;
         }
+
+        if (isBurp) {
+            var _tmp = this.burpRequestResponse.getResponse();
+            this.body = Arrays.copyOfRange(_tmp,this.burpRespInfo.getBodyOffset(),_tmp.length);
+            return this.body;
+        }
         body = this.response.body().bytes();
         return body;
     }
 
     public List<String> getHeaders() {
+        if (isBurp) {
+            return burpRespInfo.getHeaders();
+        }
         List<String> result = new ArrayList<>();
         for (var h : this.response.headers()) {
             result.add(h.getFirst()+":"+h.getSecond());
@@ -146,6 +170,9 @@ public class GtResponse {
     }
 
     public byte[] raw() {
+        if (isBurp) {
+            return this.burpRequestResponse.getResponse();
+        }
         StringBuilder builder = new StringBuilder();
         String protocol = "";
         if (this.response.protocol() == Protocol.HTTP_1_0) {

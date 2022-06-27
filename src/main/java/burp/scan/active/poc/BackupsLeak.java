@@ -7,6 +7,7 @@ import burp.scan.active.feature.Disable;
 import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
 import burp.scan.lib.web.WebPageInfo;
+import burp.scan.lib.web.utils.GtRequest;
 import burp.scan.lib.web.utils.GtSession;
 import burp.scan.lib.web.utils.GtURL;
 import burp.scan.lib.web.utils.PageUtils;
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class BackupsLeak implements ModuleBase, Debug, Disable {
+public class BackupsLeak implements ModuleBase, Debug {
     static String[] FILES = {
             ".git/config",
             ".svn/entries",
@@ -74,14 +75,15 @@ public class BackupsLeak implements ModuleBase, Debug, Disable {
             String targetUrl = baseUrl + FILE;
             callbacks.printOutput("target url:"+targetUrl);
             try {
-                GtSession request = new GtSession();
-                var result = request.burpGet(targetUrl);
-                var content = new String(result.getResponse());
+                GtSession request = GtSession.getGlobalSession();
+                GtRequest req = new GtRequest(targetUrl);
+                var result = request.sendRequest(req);
+                var content = new String(result.getBody());
                 if (isFileMatch(FILE,content)) {
                     IScanIssue issue = new GtScanIssue(
                             httpService,
                             u.getURL(),
-                            result,
+                            result.getRequestResponse(),
                             "BackupsLeak",
                             "BackupFile:"+FILE,
                             "",

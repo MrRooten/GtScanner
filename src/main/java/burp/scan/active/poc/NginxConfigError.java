@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class NginxConfigError implements ModuleBase, RunOnce {
-    boolean CRLFInjection(WebPageInfo webPageInfo) {
+    IHttpRequestResponse CRLFInjection(WebPageInfo webPageInfo) {
         String url = new GtURL(webPageInfo.getUrl()).getBaseUrl();
         if (url.startsWith("https://")) {
             url = url.substring(8);
@@ -29,10 +29,10 @@ public class NginxConfigError implements ModuleBase, RunOnce {
         List<String> headers = responseInfo.getHeaders();
         for (String header : headers) {
             if (header.toLowerCase().startsWith("set-cookie")&&header.contains("a=1")) {
-                return true;
+                return baseRequestResponse;
             }
         }
-        return false;
+        return null;
     }
 
     boolean PathTravel(WebPageInfo webPageInfo) {
@@ -45,15 +45,16 @@ public class NginxConfigError implements ModuleBase, RunOnce {
 
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
-        if (CRLFInjection(webInfo)) {
+        var reqResp = CRLFInjection(webInfo);
+        if (reqResp!=null) {
             IScanIssue issue = new GtScanIssue(
-                    webInfo.getHttpRequestResponse().getHttpService(),
+                    reqResp.getHttpService(),
                     (new GtURL(webInfo.getUrl())).getURL(),
-                    webInfo.getHttpRequestResponse(),
+                    reqResp,
                     "NginxCRLFInjection",
                     "Nginx CRLF Injection",
                     "Remedy",
-                    Risk.High,
+                    Risk.Medium,
                     Confidence.Firm
             );
             GlobalFunction.callbacks.addScanIssue(issue);

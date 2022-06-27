@@ -1,5 +1,8 @@
 package burp.scan.lib.web.utils;
 
+import burp.IHttpService;
+import burp.scan.lib.GlobalFunction;
+import burp.scan.lib.HTTPParser;
 import burp.scan.lib.RequestParser;
 import okhttp3.*;
 
@@ -52,7 +55,7 @@ public class GtRequest {
     }
 
     public GtRequest(String url) {
-        this.method = "get";
+        this.method = "GET";
         GtURL u = new GtURL(url);
         if (u.getProtocol().equalsIgnoreCase("https")) {
             this.isHttps = true;
@@ -60,11 +63,33 @@ public class GtRequest {
         this.url = url;
         this.protocol = "HTTP/1.1";
         this.headers = new ArrayList<>();
-        this.headers.add("Host: " + u.getHost());
+        this.headers.add("Host: " + u.getHostNormal());
         this.headers.add("User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Ch02.0.5005.63 Safari/537.36rome/1");
         this.headers.add("Accept: */*");
         this.body = null;
         buildRequest();
+    }
+
+    public void setQueryPath(String queryPath) {
+        String targetUrl = "";
+        var u = new GtURL(this.url);
+        if (u.isHttps()) {
+            targetUrl = "https://";
+        } else {
+            targetUrl = "http://";
+        }
+
+        targetUrl += u.getHostNormal();
+        targetUrl += queryPath;
+        this.url = targetUrl;
+    }
+
+    public void setRequestBody(byte[] body) {
+        this.body = body;
+    }
+
+    public void setRequestBody(String body) {
+        this.body = body.getBytes(StandardCharsets.UTF_8);
     }
 
     public void setHeader(String header) {
@@ -167,9 +192,10 @@ public class GtRequest {
     }
     public byte[] raw() {
         StringBuilder result = new StringBuilder();
-        result.append(this.method);
+        var u = new GtURL(url);
+        result.append(this.method.toUpperCase());
         result.append(" ");
-        result.append(this.url);
+        result.append(u.getPath()+"?"+u.getQuery());
         result.append(" ");
         result.append(this.protocol);
         result.append("\r\n");
@@ -187,5 +213,19 @@ public class GtRequest {
 
     public String getUrl() {
         return this.url;
+    }
+    boolean isBurp = false;
+    public void setBurp() {
+        this.isBurp = true;
+    }
+
+    public boolean getBurp() {
+        return this.isBurp;
+    }
+
+    public IHttpService getHttpService() {
+        var u = new GtURL(this.url);
+        var res = GlobalFunction.helpers.buildHttpService(u.getHostWithoutPort(),u.getPort(),this.isHttps);
+        return res;
     }
 }

@@ -80,13 +80,10 @@ public class GtSession {
     }
     X509TrustManager manager = SSLSocketClientUtil.getX509TrustManager();
     public GtSession(Protocol protocol) {
-
         client = new OkHttpClient().newBuilder().protocols(Arrays.asList(protocol)).build();
     }
 
-    public GtSession(Request request) {
 
-    }
     public GtSession() {
         client = new OkHttpClient();
     }
@@ -122,6 +119,7 @@ public class GtSession {
         client = client.newBuilder().sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager),manager).
                 hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier()).proxy(pp).build();
     }
+
     public IHttpRequestResponse burpGet(String url) throws IOException {
         GtURL u = new GtURL(url);
         String host = u.getHost();
@@ -266,9 +264,18 @@ public class GtSession {
         return reqString.toString().getBytes(StandardCharsets.UTF_8);
     }
 
+    boolean isBurpRequest = false;
+    public void setBurpRequest() {
+        this.isBurpRequest = true;
+    }
+
     public GtResponse sendRequest(GtRequest request) throws IOException {
+        if (isBurpRequest == true) {
+
+        }
         Request req = request.getRequest();
         var res = this.client.newCall(req).execute();
         return new GtResponse(request,res);
     }
+
 }

@@ -1,6 +1,7 @@
 package burp.scan.lib;
 
 import burp.IParameter;
+import org.json.JSONObject;
 
 public class GtParameter {
     public enum ParameterType {
@@ -62,4 +63,18 @@ public class GtParameter {
         }
         return ParameterType.NOT_KNOWN;
     }
+
+    public boolean isJson() {
+        return false;
+    }
+
+    public boolean isXml() {
+        return false;
+    }
+
+    public boolean isInteger() {
+        return false;
+    }
+
+
 }

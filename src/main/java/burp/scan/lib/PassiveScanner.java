@@ -169,6 +169,7 @@ public class PassiveScanner {
         }
         String xPoweredByHeader = HTTPParser.getResponseHeaderValue(respInfo, "X-Powered-By");
         WebPageInfo webInfo = new WebPageInfo(baseRequestResponse,reqBody,respBody,reqInfo,respInfo);
+        //Before Passive Scan and Active Scan
 
         callbacks.printOutput("PASSIVE_RULES length:"+PASSIVE_RULES.size());
         for(PassiveRule scanner : PASSIVE_RULES) {
@@ -186,6 +187,9 @@ public class PassiveScanner {
         stdout.println(webInfo.getSiteInfo().getHost() + ":" + webInfo.getSiteInfo().getTags().toString());
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (ModuleBase module : ACTIVE_MODULES) {
+            if (module instanceof Disable) {
+                continue;
+            }
             if (webInfo.getSiteInfo().containsRunnedModule(module)) {
                 if (module instanceof RunOnce) {
                     continue;

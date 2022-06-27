@@ -4,9 +4,11 @@ import burp.scan.lib.RequestParser;
 import burp.scan.lib.utils.BytesUtils;
 import burp.scan.lib.web.utils.GtRequest;
 import burp.scan.lib.web.utils.GtSession;
+import burp.scan.lib.web.utils.GtURL;
 
 import java.io.IOException;
 import java.net.Proxy;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -35,10 +37,8 @@ public class Test {
         System.out.println(b.toString());
     }
     public static void main(String[] args) throws IOException {
-        GtSession session = new GtSession();
-        session.setProxy("http://127.0.0.1:8080");
-        GtRequest request = new GtRequest(payload.getBytes(),false);
-        var res = session.sendRequest(request);
-        System.out.println(new String(res.getBody()));
+        var a = new GtRequest(payload.getBytes(StandardCharsets.UTF_8),true);
+        a.setQueryPath("/abc?123");
+        System.out.println(new String(a.raw()));
     }
 }
