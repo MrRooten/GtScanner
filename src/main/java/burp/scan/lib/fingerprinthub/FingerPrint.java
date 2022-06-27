@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 public class FingerPrint {
-    public String path;
-    public String match_method;
-    public String value;
-    public String finger_name;
+    String path;
+    String match_method;
+    String value;
+    String finger_name;
     public FingerPrint(String match_method,String path,String value,String finger_name) {
         this.path = path;
         this.value = value;
@@ -50,6 +50,10 @@ public class FingerPrint {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getFingerName() {
+        return this.finger_name;
     }
 
 }

@@ -25,12 +25,11 @@ public class FaviconIconModule implements PreScanModule{
             var md = MessageDigest.getInstance("md5");
             var digest = md.digest(body);
             BigInteger bigInt = new BigInteger(1,digest);
-            String hashtext = bigInt.toString(16).toLowerCase();
-            var finger = FingerPrint.faviconHash.get(hashtext);
+            String hashText = bigInt.toString(16).toLowerCase();
+            var finger = FingerPrint.faviconHash.get(hashText);
             if (finger == null) {
                 return ;
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();
