@@ -2,6 +2,7 @@ package test;
 
 import burp.scan.lib.RequestParser;
 import burp.scan.lib.utils.BytesUtils;
+import burp.scan.lib.utils.GlobalConfig;
 import burp.scan.lib.web.utils.GtRequest;
 import burp.scan.lib.web.utils.GtSession;
 import burp.scan.lib.web.utils.GtURL;
@@ -37,8 +38,9 @@ public class Test {
         System.out.println(b.toString());
     }
     public static void main(String[] args) throws IOException {
-        var a = new GtRequest(payload.getBytes(StandardCharsets.UTF_8),true);
-        a.setQueryPath("/abc?123");
-        System.out.println(new String(a.raw()));
+        GlobalConfig config = GlobalConfig.getInstance();
+        config.setValue("http.proxy","http://127.0.0.1:9001");
+        System.out.println(config.getValue("http.proxy"));
+        return ;
     }
 }
