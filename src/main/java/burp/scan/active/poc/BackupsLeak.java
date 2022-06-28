@@ -29,21 +29,14 @@ public class BackupsLeak implements ModuleBase, Debug {
             "connect.inc",
             "conn.inc",
             "sql.inc",
-            "debug.inc"
+            "debug.inc",
+            "www.zip"
     };
 
     static Map<String, String[]> filesMatches = new HashMap<>();
     static Set<String> urls = new HashSet<>();
     static {
         filesMatches.put(".git/config",new String[]{"[core]","master","main"});
-        filesMatches.put(".svn/entries",null);
-        filesMatches.put(".DS_Store",null);
-        filesMatches.put("database.inc",null);
-        filesMatches.put("common.inc",null);
-        filesMatches.put("db.inc",null);
-        filesMatches.put("connect.inc",null);
-        filesMatches.put("sql.inc",null);
-        filesMatches.put("debug.inc",null);
     }
 
     boolean isFileMatch(String file,String content) {
@@ -71,7 +64,7 @@ public class BackupsLeak implements ModuleBase, Debug {
             urls.add(baseUrl);
         }
         IHttpService httpService = webInfo.getHttpRequestResponse().getHttpService();
-        for (String FILE : filesMatches.keySet()) {
+        for (String FILE : FILES) {
             String targetUrl = baseUrl + FILE;
             callbacks.printOutput("target url:"+targetUrl);
             try {

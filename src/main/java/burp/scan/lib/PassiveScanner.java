@@ -200,13 +200,11 @@ public class PassiveScanner {
                 if (module instanceof Disable) {
                     continue;
                 }
-                callbacks.printOutput("Starting:"+module.getClass().toString());
                 try {
                     module.scan(callbacks, webInfo);
                 } catch (Exception e) {
                     callbacks.printError(e.getLocalizedMessage());
                 }
-                callbacks.printOutput("End:"+ module.getClass().toString());
                 webInfo.getSiteInfo().addRunnedModule(module);
             }
 
