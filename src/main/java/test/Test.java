@@ -1,18 +1,9 @@
 package test;
 
-import burp.scan.lib.RequestParser;
-import burp.scan.lib.utils.BytesUtils;
-import burp.scan.lib.utils.GlobalConfig;
-import burp.scan.lib.web.utils.GtRequest;
-import burp.scan.lib.web.utils.GtSession;
-import burp.scan.lib.web.utils.GtURL;
+import burp.scan.lib.ProcServer;
+import burp.scan.lib.utils.Config;
 
 import java.io.IOException;
-import java.net.Proxy;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
 
 
 public class Test {
@@ -38,9 +29,12 @@ public class Test {
         System.out.println(b.toString());
     }
     public static void main(String[] args) throws IOException {
-        GlobalConfig config = GlobalConfig.getInstance();
-        config.setValue("http.proxy","http://127.0.0.1:9001");
-        System.out.println(config.getValue("http.proxy"));
-        return ;
+        ProcServer server = new ProcServer(9999);
+        server.run();
+        String regex = "([a-z])([A-Z]+)";
+        String replacement = "$1_$2";
+        System.out.println("Weblogi_cCVE2019725"
+                .replaceAll(regex, replacement)
+                .toLowerCase());
     }
 }

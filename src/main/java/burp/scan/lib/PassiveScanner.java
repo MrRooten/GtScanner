@@ -4,6 +4,7 @@ import burp.*;
 import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.Disable;
 import burp.scan.active.feature.RunOnce;
+import burp.scan.lib.utils.Config;
 import burp.scan.lib.web.WebPageInfo;
 
 import java.io.File;
@@ -169,6 +170,7 @@ public class PassiveScanner {
         }
         String xPoweredByHeader = HTTPParser.getResponseHeaderValue(respInfo, "X-Powered-By");
         WebPageInfo webInfo = new WebPageInfo(baseRequestResponse,reqBody,respBody,reqInfo,respInfo);
+        webInfo.setConfig(Config.getInstance());
         //Before Passive Scan and Active Scan
 
         callbacks.printOutput("PASSIVE_RULES length:"+PASSIVE_RULES.size());

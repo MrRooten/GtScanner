@@ -2,8 +2,8 @@ package burp.scan.lib.utils;
 
 import org.json.JSONObject;
 
-public class GlobalConfig {
-    static GlobalConfig instance;
+public class Config implements Cloneable{
+    static Config instance;
     JSONObject config = new JSONObject();
     public String getValue(String name) {
         String[] keys = name.trim().split("\\.");
@@ -47,12 +47,17 @@ public class GlobalConfig {
         JSONObject object = new JSONObject(jsonString);
         this.config = object;
     }
-    public static GlobalConfig getInstance() {
+
+    public JSONObject getConfig() {
+        return this.config;
+    }
+    public static Config getInstance() {
         if (instance != null) {
             return instance;
         }
 
-        instance = new GlobalConfig();
+        instance = new Config();
         return instance;
     }
+
 }

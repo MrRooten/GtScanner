@@ -3,7 +3,7 @@ package burp.scan.lib.web.utils;
 import burp.IHttpRequestResponse;
 import burp.IHttpService;
 import burp.scan.lib.GlobalFunction;
-import burp.scan.lib.utils.GlobalConfig;
+import burp.scan.lib.utils.Config;
 import okhttp3.*;
 
 import javax.net.ssl.*;
@@ -93,7 +93,7 @@ public class GtSession {
             return globalSession;
         }
         globalSession = new GtSession();
-        globalSession.setProxy(GlobalConfig.getInstance().getValue("network.proxy"));
+        globalSession.setProxy(Config.getInstance().getValue("network.proxy"));
         return globalSession;
     }
     public void setProxy(String proxyString) {

@@ -6,6 +6,7 @@ import burp.IResponseInfo;
 import burp.IScanIssue;
 import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.RequestInfoParser;
+import burp.scan.lib.utils.Config;
 import burp.scan.tags.TagTypes;
 import burp.scan.tags.TagUtils;
 
@@ -30,6 +31,8 @@ public class WebPageInfo {
     private String respBody;
     private IRequestInfo reqInfo;
     private IResponseInfo respInfo;
+
+    private Config config;
     public void addTag(TagTypes type) {
         String typeString = TagUtils.toStandardName(type);
         tags.add(typeString);
@@ -63,6 +66,9 @@ public class WebPageInfo {
         return this.reqBody;
     }
 
+    public void setConfig(Config config) {
+        this.config.initialize(config.toJsonString());
+    }
     public String getRespBody() {
         return this.respBody;
     }
