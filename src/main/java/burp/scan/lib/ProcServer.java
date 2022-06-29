@@ -48,6 +48,7 @@ class ResultMessage {
         resultMessage.setType("success");
         return resultMessage.toJsonString();
     }
+
 }
 
 class Handler implements Runnable {
@@ -58,6 +59,10 @@ class Handler implements Runnable {
         outputStream.write(result.getBytes());
     }
 
+    void success(OutputStream outputStream) throws IOException {
+        var result = ResultMessage.NewSuccessMessage();
+        outputStream.write(result.getBytes());
+    }
     InputStream inputStream;
     OutputStream outputStream;
 
@@ -119,24 +124,34 @@ class Handler implements Runnable {
                     if (object.has("key")) {
                         key = object.getString("key");
                     } else {
-                        logger.info("set_config must have the key");
+                        err("set_config must have the key",outputStream);
                         continue;
                     }
                     String value = null;
                     if (object.has("value")) {
                         value = object.getString("value");
                     } else {
-                        logger.info("set_config must have the value");
+                        err("set_config must have the value",outputStream);
                         continue;
                     }
 
                     Config.getInstance().setValue(key, value);
+                    success(outputStream);
                 } else if (action.equals("add_config")) {
 
                 } else if (action.equals("read_config")) {
-
+                    outputStream.write(Config.getInstance().toJsonString().getBytes());
                 } else if (action.equals("get_config")) {
+                    String key = null;
+                    if (object.has("key")) {
+                        key = object.getString("key");
+                    } else {
+                        err("get_config must have the key",outputStream);
+                        continue;
+                    }
 
+                    String value = Config.getInstance().getValue(key);
+                    outputStream.write(value.getBytes());
                 } else if (action.equals("set_pocs")) {
 
                 } else if (action.equals("list_pocs")) {
