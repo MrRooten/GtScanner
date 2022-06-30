@@ -1,7 +1,6 @@
 package burp.scan.lib.web.utils;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
-import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,7 +31,7 @@ public class PageUtils {
     public static boolean isPageExist(String url) throws IOException {
         GtSession request = new GtSession();
         var response = request.get(url);
-        if (response.getStatudCode() == 404) {
+        if (response.getStatusCode() == 404) {
             return false;
         }
         byte[] errorPage = getErrorPage(url);
@@ -49,8 +48,8 @@ public class PageUtils {
     }
 
     public static boolean isPageExistByPage(GtResponse page,GtResponse errorPage) throws IOException {
-        if (errorPage.getStatudCode() == 404) {
-            if (page.getStatudCode() != 404) {
+        if (errorPage.getStatusCode() == 404) {
+            if (page.getStatusCode() != 404) {
                 return false;
             } else {
                 return true;

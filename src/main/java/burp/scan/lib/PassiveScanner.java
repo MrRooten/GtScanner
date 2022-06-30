@@ -15,10 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.jar.JarEntry;
@@ -26,10 +23,16 @@ import java.util.jar.JarFile;
 
 
 public class PassiveScanner {
-
-    static List<ModuleBase> getModules() {
+    static String to_snake_case(String name) {
+        String regex = "([a-z])([A-Z]+)";
+        String replacement = "$1_$2";
+        return name.replaceAll(regex, replacement)
+                .toLowerCase();
+    }
+    static Map<String,ModuleBase> snake_caseModules = new HashMap<>();
+    static List<ModuleWrapper> getModules() {
         List<String> modules = null;
-        List<ModuleBase> result = new ArrayList<>();
+        List<ModuleWrapper> result = new ArrayList<>();
         try {
             modules = getClassNamesFromPackage("burp.scan.active.poc.");
             for (String module : modules) {
@@ -41,7 +44,8 @@ public class PassiveScanner {
                 ModuleBase gtModule = (ModuleBase) c.newInstance();
                 for (Method m : gtModule.getClass().getMethods()) {
                     if (m.getName().equals("scan")) {
-                        result.add(gtModule);
+                        result.add(new ModuleWrapper(gtModule));
+                        snake_caseModules.put(to_snake_case(module),gtModule);
                     }
                 }
             }
@@ -74,7 +78,7 @@ public class PassiveScanner {
         }
         return result;
     }
-    static List<ModuleBase> ACTIVE_MODULES = getModules();
+    static List<ModuleWrapper> ACTIVE_MODULES = getModules();
     static List<PassiveRule> PASSIVE_RULES = getPassiveModules();
     public static ArrayList<String> getClassNamesFromPackage(String packageName) throws IOException {
         URL packageURL;
@@ -141,7 +145,52 @@ public class PassiveScanner {
 
         return false;
     }
-    public static List<IScanIssue> scanVulnerabilities(IHttpRequestResponse baseRequestResponse,
+
+    static List<ModuleWrapper> getEnableModules() {
+        List<ModuleWrapper> res = new ArrayList<>();
+        String _pocs = Config.getInstance().getValue("pocs.enable_pocs");
+        String _free_pocs = Config.getInstance().getValue("pocs.free_pocs");
+        var pocs = _pocs.split("\\s*,\\s*");
+        var free_pocs = new HashSet<>(List.of(_free_pocs.split("\\s*,\\s*")));
+        for (var poc : pocs) {
+            if (snake_caseModules.containsKey(poc)) {
+                var wrapper = new ModuleWrapper(snake_caseModules.get(poc));
+                if (free_pocs.contains(poc)) {
+                    wrapper.setFree();
+                } else {
+                    wrapper.unsetFree();
+                }
+                res.add(wrapper);
+            }
+        }
+
+        return res;
+    }
+
+    static class ModuleWrapper {
+        ModuleBase module;
+        boolean isFree = false;
+        public ModuleWrapper(ModuleBase moduleBase) {
+            this.module = moduleBase;
+        }
+
+        public boolean isFree() {
+            return isFree;
+        }
+
+        public void setFree() {
+            this.isFree = true;
+        }
+
+        public void unsetFree() {
+            this.isFree = false;
+        }
+
+        public ModuleBase getModule() {
+            return this.module;
+        }
+    }
+    public List<IScanIssue> scanVulnerabilities(IHttpRequestResponse baseRequestResponse,
                                            IBurpExtenderCallbacks callbacks) {
         long startTime = System.nanoTime();
         IExtensionHelpers helpers = callbacks.getHelpers();
@@ -188,26 +237,31 @@ public class PassiveScanner {
         callbacks.printOutput("Passive Page Cost Time:"+totalTime);
         stdout.println(webInfo.getSiteInfo().getHost() + ":" + webInfo.getSiteInfo().getTags().toString());
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (ModuleBase module : ACTIVE_MODULES) {
-            if (module instanceof Disable) {
-                continue;
-            }
-            if (webInfo.getSiteInfo().containsRunnedModule(module)) {
-                if (module instanceof RunOnce) {
+        var enableModules = getEnableModules();
+        for (ModuleWrapper module : enableModules) {
+            if (module!=null && module.isFree()) {
+                module.getModule().scan(callbacks,webInfo);
+            } else {
+                if (module.getModule() instanceof Disable) {
                     continue;
                 }
-            }
-            Set<String> tags = module.getTags();
-            if (module.getTags()==null||webInfo.getSiteInfo().hasTags(module.getTags())) {
-                if (module instanceof Disable) {
-                    continue;
+                if (webInfo.getSiteInfo().containsRunnedModule(module.getModule())) {
+                    if (module.getModule() instanceof RunOnce) {
+                        continue;
+                    }
                 }
-                try {
-                    module.scan(callbacks, webInfo);
-                } catch (Exception e) {
-                    callbacks.printError(e.getLocalizedMessage());
+                Set<String> tags = module.getModule().getTags();
+                if (module.getModule().getTags() == null || webInfo.getSiteInfo().hasTags(module.getModule().getTags())) {
+                    if (module.getModule() instanceof Disable) {
+                        continue;
+                    }
+                    try {
+                        module.getModule().scan(callbacks, webInfo);
+                    } catch (Exception e) {
+                        callbacks.printError(e.getLocalizedMessage());
+                    }
+                    webInfo.getSiteInfo().addRunnedModule(module.getModule());
                 }
-                webInfo.getSiteInfo().addRunnedModule(module);
             }
 
         }

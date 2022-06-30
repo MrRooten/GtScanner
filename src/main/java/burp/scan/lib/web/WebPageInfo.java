@@ -32,7 +32,7 @@ public class WebPageInfo {
     private IRequestInfo reqInfo;
     private IResponseInfo respInfo;
 
-    private Config config;
+    private Config config = new Config();
     public void addTag(TagTypes type) {
         String typeString = TagUtils.toStandardName(type);
         tags.add(typeString);

@@ -32,7 +32,7 @@ public class WebLogicSSRF implements ModuleBase {
         try {
             var response = session.sendRequest(request);
             String respBody = new String(response.getBody());
-            if (response.getStatudCode() == 200 && (respBody.contains("&#39;127.1.1.1&#39;, port: &#39;700&#39;")||respBody.contains("Socket Closed"))) {
+            if (response.getStatusCode() == 200 && (respBody.contains("&#39;127.1.1.1&#39;, port: &#39;700&#39;")||respBody.contains("Socket Closed"))) {
                 IScanIssue issue = new GtScanIssue(
                         response.getRequestResponse().getHttpService(),
                         new URL(targetUrl),

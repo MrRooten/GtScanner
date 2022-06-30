@@ -35,7 +35,7 @@ public class LaravelImproperWebdir implements ModuleBase, RunOnce, Debug {
             var body = response.getBody();
             var respBody = new String(body);
             var respContentType = response.getHeaderValue("Content-type");
-            if (response.getStatudCode() == 200 && (respContentType.contains("plain") ||
+            if (response.getStatusCode() == 200 && (respContentType.contains("plain") ||
                     respContentType.contains("octet-stream")) && (respBody.contains("vendor\\laravel\\framework")
             ||respBody.contains("vendor/laravel/framework")) && (respBody.contains("stacktrace") || respBody.contains("Stack trace"))) {
                 IScanIssue issue = new GtScanIssue(

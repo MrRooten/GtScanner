@@ -67,6 +67,7 @@ class SSLSocketClientUtil {
 
 }
 public class GtSession {
+    OkHttpClient _client;
     OkHttpClient client;
     static List<String> defalutHeaders = new ArrayList<>();
     static {
@@ -80,20 +81,26 @@ public class GtSession {
     }
     X509TrustManager manager = SSLSocketClientUtil.getX509TrustManager();
     public GtSession(Protocol protocol) {
-        client = new OkHttpClient().newBuilder().protocols(Arrays.asList(protocol)).build();
+        _client = new OkHttpClient().newBuilder().protocols(Arrays.asList(protocol)).build();
+        client = _client;
     }
 
 
     public GtSession() {
-        client = new OkHttpClient();
+        _client = new OkHttpClient();
+        client = _client;
     }
     static GtSession globalSession;
     public static GtSession getGlobalSession() {
-        if(globalSession != null) {
-            return globalSession;
+        if (globalSession == null) {
+            globalSession = new GtSession();
         }
-        globalSession = new GtSession();
-        globalSession.setProxy(Config.getInstance().getValue("network.proxy"));
+        globalSession.setProxy(Config.getInstance().getValue("http.proxy"));
+        if (Config.getInstance().getValue("http.client").equalsIgnoreCase("burp")) {
+            globalSession.setBurpRequest();
+        } else {
+            globalSession.unsetBurpRequest();
+        }
         return globalSession;
     }
     public void setProxy(String proxyString) {
@@ -101,7 +108,7 @@ public class GtSession {
         if (proxyString.trim().length() == 0) {
             type = Proxy.Type.DIRECT;
             Proxy pp = Proxy.NO_PROXY;
-            client = client.newBuilder().sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager),manager).
+            client = _client.newBuilder().sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager),manager).
                     hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier()).proxy(pp).build();
             return ;
         }
@@ -116,7 +123,7 @@ public class GtSession {
 
     public void setProxy(Proxy.Type type,String host,int port) {
         Proxy pp = new Proxy(type,new InetSocketAddress(host,port));
-        client = client.newBuilder().sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager),manager).
+        client = _client.newBuilder().sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager),manager).
                 hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier()).proxy(pp).build();
     }
 
@@ -269,9 +276,18 @@ public class GtSession {
         this.isBurpRequest = true;
     }
 
+    public void unsetBurpRequest() {
+        this.isBurpRequest = false;
+    }
+
     public GtResponse sendRequest(GtRequest request) throws IOException {
         if (isBurpRequest == true) {
-
+            var url = new GtURL(request.getUrl());
+            var httpService = GlobalFunction.helpers.buildHttpService(url.getHostWithoutPort(),url.getPort(), url.isHttps());
+            IHttpRequestResponse result = null;
+            result = GlobalFunction.callbacks.makeHttpRequest(httpService, request.raw());
+            var response = new GtResponse(result);
+            return response;
         }
         Request req = request.getRequest();
         var res = this.client.newCall(req).execute();

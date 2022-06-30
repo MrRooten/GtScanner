@@ -2,6 +2,7 @@ package burp;
 
 import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.PassiveScanner;
+import burp.scan.lib.ProcServer;
 import burp.scan.lib.fingerprinthub.FingerPrint;
 import burp.scan.lib.utils.Utils;
 import burp.scan.tags.TagUtils;
@@ -37,12 +38,13 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
 
         // register ourselves as a custom scanner check
         callbacks.registerScannerCheck(this);
-
         TagUtils.InitTags();
 
         GlobalFunction.callbacks = callbacks;
         GlobalFunction.helpers = callbacks.getHelpers();
         FingerPrint.InitializeFingerPrints();
+        var procServer = ProcServer.getInstance();
+        procServer.run();
     }
 
     // helper method to search a response for occurrences of a literal match string
@@ -67,13 +69,13 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
     //
     // implement IScannerCheck
     //
-
+    static PassiveScanner scanner = new PassiveScanner();
     @Override
     public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse)
     {
         // look for matches of our passive check grep string
 
-        List<IScanIssue> issues = PassiveScanner.scanVulnerabilities(baseRequestResponse, callbacks);
+        List<IScanIssue> issues = scanner.scanVulnerabilities(baseRequestResponse, callbacks);
 
         return issues;
     }

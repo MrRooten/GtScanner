@@ -94,7 +94,7 @@ public class WeakPasswordBruteforcer {
                                 httpServiceInstance);
 
 
-                        PassiveScanner.scanVulnerabilities(result, callbacks);
+                        //PassiveScanner.scanVulnerabilities(result, callbacks);
                                 
                         return result;
                     }

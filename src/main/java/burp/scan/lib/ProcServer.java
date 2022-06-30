@@ -232,9 +232,26 @@ class Handler implements Runnable {
                     }
 
                     String value = Config.getInstance().getValue(key);
-                    outputStream.write(value.getBytes());
+                    outputStream.write(String.format("%s=%s",key,value).getBytes());
                 } else if (action.equals("set_pocs")) {
+                    if (!valueType.equals("array")) {
+                        err("set_pocs value type must be array",outputStream);
+                        continue;
+                    }
 
+                    JSONArray pocs = null;
+                    if (object.has("value")) {
+                        pocs = object.getJSONArray("value");
+                    } else {
+                        err("set_pocs must have the value",outputStream);
+                        continue;
+                    }
+                    List<String> store = new ArrayList<>();
+                    for (int i=0;i < pocs.length();i++) {
+                        store.add(pocs.getString(i));
+                    }
+                    Config.getInstance().setValue("pocs.enable_pocs",String.join(",",store));
+                    success(outputStream);
                 } else if (action.equals("list_pocs")) {
                     var modules = getModules();
                     JSONArray array = new JSONArray();
@@ -275,6 +292,7 @@ class Handler implements Runnable {
 public class ProcServer implements Runnable {
     int port;
     Logger logger;
+    ServerSocket ss;
     public ProcServer(int port) {
         this.port = port;
         this.logger = Logger.getLogger(Logger.Level.Debug);
@@ -283,7 +301,7 @@ public class ProcServer implements Runnable {
     @Override
     public void run() {
         logger.info("Starting ProcServer Class...");
-        ServerSocket ss = null;
+        ss = null;
         Socket client = null;
 
         try {
@@ -307,5 +325,22 @@ public class ProcServer implements Runnable {
             }
         }
 
+    }
+
+    public void close() {
+        try {
+            this.ss.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    static ProcServer server = null;
+    public static ProcServer getInstance() {
+        if (server != null) {
+            return server;
+        }
+
+        server = new ProcServer(9999);
+        return server;
     }
 }

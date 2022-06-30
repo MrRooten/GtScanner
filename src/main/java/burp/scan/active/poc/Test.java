@@ -16,12 +16,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
 
-public class Test implements ModuleBase, Disable {
+public class Test implements ModuleBase {
     @Override
     public void scan(IBurpExtenderCallbacks callbacks, WebPageInfo webInfo) {
         String url = webInfo.getUrl();
         GtSession session = GtSession.getGlobalSession();
-
+        callbacks.printOutput("This is test");
+        session.setBurpRequest();
             GtRequest request = new GtRequest(url);
             try {
                 var resp = session.sendRequest(request);

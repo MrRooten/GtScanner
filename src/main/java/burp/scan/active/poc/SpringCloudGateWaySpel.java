@@ -93,13 +93,13 @@ public class SpringCloudGateWaySpel implements ModuleBase, RunOnceOnlySuccess {
         GtRequest request = new GtRequest(payload.getBytes(),isHttps);
         try {
             GtResponse response = session.sendRequest(request);
-            if (response.getStatudCode() != 201) {
+            if (response.getStatusCode() != 201) {
                 return;
             }
             payload = String.format(routePayload,url.getHost());
             request = new GtRequest(payload.getBytes(),isHttps);
             response = session.sendRequest(request);
-            if (response.getStatudCode() != 200) {
+            if (response.getStatusCode() != 200) {
                 return ;
             }
             payload = String.format(resultPayload,url.getHost());

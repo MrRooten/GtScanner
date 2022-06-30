@@ -105,8 +105,13 @@ public class GtResponse {
             return this.httpRequestResponse;
         }
         GtHttpRequestResponse result = new GtHttpRequestResponse();
-        result.setRequest(this.request.raw());
-        result.setResponse(this.raw());
+        if (isBurp) {
+            result.setRequest(this.burpRequestResponse.getRequest());
+            result.setResponse(this.burpRequestResponse.getResponse());
+        } else {
+            result.setRequest(this.request.raw());
+            result.setResponse(this.raw());
+        }
         String url = this.request.getUrl();
         GtURL u = new GtURL(url);
         GtHttpService httpService = new GtHttpService(u.getHostWithoutPort(),u.getPort(),u.getProtocol());
@@ -137,7 +142,7 @@ public class GtResponse {
         this.exception = e;
     }
 
-    public int getStatudCode() {
+    public int getStatusCode() {
         if (isBurp) {
             return this.burpRespInfo.getStatusCode();
         }
@@ -184,9 +189,9 @@ public class GtResponse {
         }
         builder.append(protocol);
         builder.append(" ");
-        builder.append(this.getStatudCode());
+        builder.append(this.getStatusCode());
         builder.append(" ");
-        builder.append(statusCodeMeaning.get(this.getStatudCode()));
+        builder.append(statusCodeMeaning.get(this.getStatusCode()));
         builder.append("\r\n");
         for (var header : this.response.headers()) {
             builder.append(header.getFirst() + ": " + header.getSecond() + "\r\n");

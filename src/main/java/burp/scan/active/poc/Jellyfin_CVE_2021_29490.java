@@ -33,7 +33,7 @@ public class Jellyfin_CVE_2021_29490 implements ModuleBase, NormalRisk {
         try {
             var response = session.sendRequest(request);
             var respBody = new String(response.getBody());
-            if (respBody.contains("baidu.com") && response.getStatudCode() == 200) {
+            if (respBody.contains("baidu.com") && response.getStatusCode() == 200) {
                 IScanIssue issue = new GtScanIssue(
                         response.getRequestResponse().getHttpService(),
                         new URL(targetUrl),
