@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
@@ -93,5 +94,10 @@ public class ApacheRollerOGNLInjection implements ModuleBase {
     @Override
     public Set<String> getTags() {
         return new HashSet<>();
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

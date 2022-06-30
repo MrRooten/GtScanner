@@ -210,7 +210,6 @@ public class PassiveScanner {
                 webInfo.getSiteInfo().addRunnedModule(module);
             }
 
-
         }
 
         return webInfo.getIssues();

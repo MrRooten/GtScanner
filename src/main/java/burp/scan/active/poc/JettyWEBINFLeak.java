@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
@@ -63,5 +64,10 @@ public class JettyWEBINFLeak implements ModuleBase, RunOnce {
         Set<String> tags = new HashSet<>();
         tags.add(TagUtils.toStandardName(TagTypes.Jetty_Java));
         return tags;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IRequestInfo;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.lib.poc.ReversePocClient;
 import burp.scan.lib.web.WebPageInfo;
 import org.apache.commons.lang3.tuple.Pair;
@@ -37,6 +38,11 @@ public class SimpleSSRF implements ModuleBase {
 
     @Override
     public Set<String> getTags() {
+        return null;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
         return null;
     }
 }

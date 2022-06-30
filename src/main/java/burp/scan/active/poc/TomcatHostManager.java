@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.*;
 import burp.scan.lib.web.WebPageInfo;
@@ -131,5 +132,10 @@ public class TomcatHostManager implements ModuleBase, RunOnce {
         Set<String> tags = new HashSet<>();
         tags.add(TagUtils.toStandardName(TagTypes.Tomcat_Java));
         return tags;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

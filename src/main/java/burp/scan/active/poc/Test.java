@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.Disable;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
@@ -44,6 +45,11 @@ public class Test implements ModuleBase, Disable {
 
     @Override
     public Set<String> getTags() {
+        return null;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
         return null;
     }
 }

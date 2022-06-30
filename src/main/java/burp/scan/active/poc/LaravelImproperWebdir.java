@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.Debug;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
@@ -60,5 +61,10 @@ public class LaravelImproperWebdir implements ModuleBase, RunOnce, Debug {
         Set<String> res = new HashSet<>();
         res.add(TagUtils.toStandardName(TagTypes.Laravel_PHP));
         return res;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

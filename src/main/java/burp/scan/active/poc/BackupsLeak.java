@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.Debug;
 import burp.scan.active.feature.Disable;
 import burp.scan.lib.GtScanIssue;
@@ -108,6 +109,11 @@ public class BackupsLeak implements ModuleBase, Debug {
 
     @Override
     public Set<String> getTags() {
+        return null;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
         return null;
     }
 }

@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.Debug;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
@@ -70,5 +71,10 @@ public class CVE_2022_26134_Confluence_Rule implements ModuleBase, RunOnce, Debu
         Set<String> res = new HashSet<>();
         res.add(TagUtils.toStandardName(TagTypes.Confluence_Java));
         return res;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

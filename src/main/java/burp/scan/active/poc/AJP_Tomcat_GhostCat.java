@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.Disable;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.active.feature.risk.HighRisk;
@@ -139,5 +140,12 @@ public class AJP_Tomcat_GhostCat implements ModuleBase, RunOnce, HighRisk, Disab
         Set<String> result = new HashSet<>();
         result.add(TagUtils.toStandardName(TagTypes.Tomcat_Java));
         return result;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        var data = new ModuleMeta();
+        data.setFingerprints(new String[]{"tomcat"});
+        return data;
     }
 }

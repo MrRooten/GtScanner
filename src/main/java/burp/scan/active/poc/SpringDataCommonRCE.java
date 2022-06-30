@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.HTTPParser;
@@ -116,5 +117,10 @@ public class SpringDataCommonRCE implements ModuleBase {
         Set<String> result = new HashSet<>();
         result.add(TagTypes.SpringDataCommon_Spring.toString());
         return result;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

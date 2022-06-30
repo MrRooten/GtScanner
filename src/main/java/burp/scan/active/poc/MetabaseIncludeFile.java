@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.HTTPParser;
 import burp.scan.lib.web.WebPageInfo;
@@ -59,5 +60,10 @@ public class MetabaseIncludeFile implements ModuleBase, RunOnce {
         Set<String> tags = new HashSet<>();
         tags.add(TagUtils.toStandardName(TagTypes.MetaBase_Base));
         return tags;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

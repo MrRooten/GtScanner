@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
@@ -161,5 +162,10 @@ public class SpringDirectoryFind implements ModuleBase, RunOnce {
         Set<String> tags = new HashSet<>();
         tags.add(TagUtils.toStandardName(TagTypes.Spring_Java));
         return tags;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

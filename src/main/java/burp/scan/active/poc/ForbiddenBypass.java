@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IResponseInfo;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.lib.web.WebPageInfo;
 import burp.scan.lib.web.utils.GtSession;
 import burp.scan.lib.web.utils.GtURL;
@@ -42,6 +43,11 @@ public class ForbiddenBypass implements ModuleBase {
 
     @Override
     public Set<String> getTags() {
+        return null;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
         return null;
     }
 }

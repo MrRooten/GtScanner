@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
@@ -115,5 +116,10 @@ public class SpringBootRestRCE implements ModuleBase, RunOnce {
         Set<String> tags = new HashSet<>();
         tags.add(TagUtils.toStandardName(TagTypes.SpringBoot_Spring));
         return tags;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

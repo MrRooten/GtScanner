@@ -34,4 +34,9 @@ public class TestModule implements ModuleBase, RunOnce {
     public Set<String> getTags() {
         return null;
     }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
+    }
 }

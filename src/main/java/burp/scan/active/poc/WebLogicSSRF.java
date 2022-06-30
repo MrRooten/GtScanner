@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
@@ -55,5 +56,10 @@ public class WebLogicSSRF implements ModuleBase {
         Set<String> res = new HashSet<>();
         res.add(TagUtils.toStandardName(TagTypes.WebLogic_Java));
         return res;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.RunOnceOnlySuccess;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
@@ -141,5 +142,10 @@ public class SpringCloudGateWaySpel implements ModuleBase, RunOnceOnlySuccess {
         Set<String> tags = new HashSet<>();
         tags.add(TagUtils.toStandardName(TagTypes.SpringCloud_Spring));
         return tags;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

@@ -5,6 +5,7 @@ import burp.IExtensionHelpers;
 import burp.IRequestInfo;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.CustomHttpRequestResponse;
 import burp.scan.lib.GtScanIssue;
@@ -139,5 +140,10 @@ public class SpringCloudConfigPathTraversal implements ModuleBase {
         Set<String> tags = new HashSet<>();
         tags.add(TagUtils.toStandardName(TagTypes.SpringCloud_Spring));
         return tags;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

@@ -5,6 +5,7 @@ import burp.IParameter;
 import burp.IRequestInfo;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
@@ -71,6 +72,11 @@ public class SimpleReflectXSS implements ModuleBase {
 
     @Override
     public Set<String> getTags() {
+        return null;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
         return null;
     }
 }

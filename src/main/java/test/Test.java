@@ -2,6 +2,7 @@ package test;
 
 import burp.scan.lib.ProcServer;
 import burp.scan.lib.utils.Config;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 
 import java.io.IOException;
 
@@ -29,12 +30,6 @@ public class Test {
         System.out.println(b.toString());
     }
     public static void main(String[] args) throws IOException {
-        ProcServer server = new ProcServer(9999);
-        server.run();
-        String regex = "([a-z])([A-Z]+)";
-        String replacement = "$1_$2";
-        System.out.println("Weblogi_cCVE2019725"
-                .replaceAll(regex, replacement)
-                .toLowerCase());
+        System.out.println(FuzzySearch.ratio("apache tomcat","tomcat bbc"));
     }
 }

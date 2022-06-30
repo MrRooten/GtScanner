@@ -9,7 +9,10 @@ public class ModuleMeta {
     String author;
     String[] relateVB;
     String[] link;
+
+    String[] fingerprints;
     String description;
+
     Risk level;
 
     public void SetAuthor(String author) {
@@ -33,11 +36,21 @@ public class ModuleMeta {
         return this.link;
     }
 
+    public void setFingerprints(String[] fingerprints) {
+        this.fingerprints = fingerprints;
+    }
+    public String[] getFingerprints() {
+        return null;
+    }
     public String getDescription() {
         return this.description;
     }
 
     public ModuleMeta(Map<String,Object> info) {
+
+    }
+
+    public ModuleMeta() {
 
     }
 }

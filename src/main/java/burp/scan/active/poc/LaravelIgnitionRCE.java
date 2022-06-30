@@ -3,6 +3,7 @@ package burp.scan.active.poc;
 import burp.IBurpExtenderCallbacks;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GlobalFunction;
@@ -81,5 +82,10 @@ public class LaravelIgnitionRCE implements ModuleBase, RunOnce {
         Set<String> result = new HashSet<>();
         result.add(TagUtils.toStandardName(TagTypes.Laravel_PHP));
         return result;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

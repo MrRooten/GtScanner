@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.*;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.Disable;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.active.feature.risk.HighRisk;
@@ -115,5 +116,10 @@ public class AJPDetector implements ModuleBase, RunOnce, HighRisk, Disable {
         Set<String> result = new HashSet<>();
         result.add("Tomcat");
         return result;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }

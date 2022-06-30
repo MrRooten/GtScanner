@@ -2,6 +2,7 @@ package burp.scan.active.poc;
 
 import burp.IBurpExtenderCallbacks;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.active.feature.risk.NormalRisk;
 import burp.scan.lib.web.WebPageInfo;
 
@@ -15,6 +16,11 @@ public class SimpleLocalFileInclude implements ModuleBase, NormalRisk {
 
     @Override
     public Set<String> getTags() {
+        return null;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
         return null;
     }
 }

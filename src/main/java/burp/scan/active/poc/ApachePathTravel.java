@@ -4,6 +4,7 @@ import burp.IBurpExtenderCallbacks;
 import burp.IResponseInfo;
 import burp.IScanIssue;
 import burp.scan.active.ModuleBase;
+import burp.scan.active.ModuleMeta;
 import burp.scan.lib.Confidence;
 import burp.scan.lib.GtScanIssue;
 import burp.scan.lib.Risk;
@@ -76,5 +77,10 @@ public class ApachePathTravel implements ModuleBase {
         Set<String> tags = new HashSet<>();
         tags.add(TagUtils.toStandardName(TagTypes.ApacheHttp_Base));
         return tags;
+    }
+
+    @Override
+    public ModuleMeta getMetadata() {
+        return null;
     }
 }
