@@ -6,6 +6,7 @@ import burp.scan.active.feature.Disable;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.utils.Config;
 import burp.scan.lib.web.WebPageInfo;
+import com.yevdo.jwildcard.JWildcard;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,13 +147,22 @@ public class PassiveScanner {
         return false;
     }
 
-    static List<ModuleWrapper> getEnableModules() {
+    public static List<ModuleWrapper> getEnableModules() {
         List<ModuleWrapper> res = new ArrayList<>();
         String _pocs = Config.getInstance().getValue("pocs.enable_pocs");
         String _free_pocs = Config.getInstance().getValue("pocs.free_pocs");
         var pocs = _pocs.split("\\s*,\\s*");
         var free_pocs = new HashSet<>(List.of(_free_pocs.split("\\s*,\\s*")));
-        for (var poc : pocs) {
+        Set<String> allPocs = new HashSet<>();
+        for (var pocEntry : snake_caseModules.entrySet()) {
+            for (var poc : pocs) {
+                if (pocEntry.getKey().matches(JWildcard.wildcardToRegex(poc))) {
+                    allPocs.add(pocEntry.getKey());
+                }
+            }
+        }
+
+        for (var poc : allPocs) {
             if (snake_caseModules.containsKey(poc)) {
                 var wrapper = new ModuleWrapper(snake_caseModules.get(poc));
                 if (free_pocs.contains(poc)) {

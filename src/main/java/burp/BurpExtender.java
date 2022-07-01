@@ -4,6 +4,7 @@ import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.PassiveScanner;
 import burp.scan.lib.ProcServer;
 import burp.scan.lib.fingerprinthub.FingerPrint;
+import burp.scan.lib.utils.Config;
 import burp.scan.lib.utils.Utils;
 import burp.scan.tags.TagUtils;
 
@@ -23,6 +24,11 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
     //
     // implement IBurpExtender
     //
+
+    void setDefaultConfig() {
+        var config = Config.getInstance();
+        config.setValue("pocs.enable_pocs","*");
+    }
 
     @Override
     public void registerExtenderCallbacks(final IBurpExtenderCallbacks callbacks)

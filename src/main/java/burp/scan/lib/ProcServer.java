@@ -3,6 +3,7 @@ package burp.scan.lib;
 import burp.scan.active.ModuleBase;
 import burp.scan.lib.utils.Config;
 import burp.scan.lib.utils.Logger;
+import com.yevdo.jwildcard.JWildcard;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,9 +16,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -118,6 +117,7 @@ class Handler implements Runnable {
         }
         return names;
     }
+    static Map<String,ModuleBase> snake_caseModules = new HashMap<>();
     List<String> getModules() {
         List<String> modules = null;
         List<String> result = new ArrayList<>();
@@ -134,6 +134,7 @@ class Handler implements Runnable {
                     for (Method m : gtModule.getClass().getMethods()) {
                         if (m.getName().equals("scan")) {
                             result.add(module);
+                            snake_caseModules.put(to_snake_case(module),gtModule);
                         }
                     }
                 } catch (Exception e) {
@@ -152,6 +153,30 @@ class Handler implements Runnable {
         String replacement = "$1_$2";
         return name.replaceAll(regex, replacement)
                 .toLowerCase();
+    }
+
+    List<String> getEnableModules() {
+        List<String> res = new ArrayList<>();
+        String _pocs = Config.getInstance().getValue("pocs.enable_pocs");
+        String _free_pocs = Config.getInstance().getValue("pocs.free_pocs");
+        var pocs = _pocs.split("\\s*,\\s*");
+        var free_pocs = new HashSet<>(List.of(_free_pocs.split("\\s*,\\s*")));
+        Set<String> allPocs = new HashSet<>();
+        for (var pocEntry : snake_caseModules.entrySet()) {
+            for (var poc : pocs) {
+                if (pocEntry.getKey().matches(JWildcard.wildcardToRegex(poc))) {
+                    allPocs.add(pocEntry.getKey());
+                }
+            }
+        }
+
+        for (var poc : allPocs) {
+            if (snake_caseModules.containsKey(poc)) {
+                res.add(poc);
+            }
+        }
+
+        return res;
     }
     @Override
     public void run() {
@@ -260,9 +285,31 @@ class Handler implements Runnable {
                     }
                     outputStream.write(array.toString().getBytes());
                 } else if (action.equals("list_running_pocs")) {
-
+                    getModules();
+                    var pocs = getEnableModules();
+                    JSONArray array = new JSONArray(pocs);
+                    outputStream.write(array.toString().getBytes());
                 } else if (action.equals("add_pocs")) {
+                    if (!valueType.equals("array")) {
+                        err("add_pocs value type must be array",outputStream);
+                        continue;
+                    }
 
+                    JSONArray pocs = null;
+                    if (object.has("value")) {
+                        pocs = object.getJSONArray("value");
+                    } else {
+                        err("add_pocs must have the value",outputStream);
+                        continue;
+                    }
+                    List<String> store = new ArrayList<>();
+                    for (int i=0;i < pocs.length();i++) {
+                        store.add(pocs.getString(i));
+                    }
+                    String newPocs = String.join(",",store);
+                    String originalPocs = Config.getInstance().getValue("pocs.enable_pocs");
+                    Config.getInstance().setValue("pocs.enable_pocs",originalPocs + "," + newPocs);
+                    success(outputStream);
                 } else if (action.equals("remove_pocs")) {
 
                 } else if (action.equals("set_poc_info_level")) {
