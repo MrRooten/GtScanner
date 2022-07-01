@@ -1,6 +1,7 @@
 package burp;
 
 import burp.scan.lib.GlobalFunction;
+import burp.scan.lib.GtExtensionStateListener;
 import burp.scan.lib.PassiveScanner;
 import burp.scan.lib.ProcServer;
 import burp.scan.lib.fingerprinthub.FingerPrint;
@@ -44,6 +45,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
 
         // register ourselves as a custom scanner check
         callbacks.registerScannerCheck(this);
+        callbacks.registerExtensionStateListener(new GtExtensionStateListener());
         TagUtils.InitTags();
 
         GlobalFunction.callbacks = callbacks;

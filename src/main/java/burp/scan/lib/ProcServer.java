@@ -190,8 +190,9 @@ class Handler implements Runnable {
                     continue;
                 }
                 String msg = new String(b, 0, len);
-                logger.debug("Receive message: " + msg);
+
                 JSONObject object = new JSONObject(msg);
+                logger.debug("Receive message: \n" + object.toString(4));
                 JSONObject resultMessage = new JSONObject();
                 String action = null;
                 String valueType = null;
@@ -361,6 +362,7 @@ public class ProcServer implements Runnable {
         while (true) {
             try {
                 client = ss.accept();
+                logger.info("Got a connection from " + client.getInetAddress().toString() + ":"+client.getPort());
                 var inputStream = client.getInputStream();
                 var outputStream = client.getOutputStream();
                 var handler = new Handler();

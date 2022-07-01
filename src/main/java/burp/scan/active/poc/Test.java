@@ -22,7 +22,6 @@ public class Test implements ModuleBase {
         String url = webInfo.getUrl();
         GtSession session = GtSession.getGlobalSession();
         callbacks.printOutput("This is test");
-        session.setBurpRequest();
             GtRequest request = new GtRequest(url);
             try {
                 var resp = session.sendRequest(request);
