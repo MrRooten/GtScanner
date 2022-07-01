@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BurpExtender implements IBurpExtender, IScannerCheck
+public class BurpExtender implements IBurpExtender, IScannerCheck, IExtensionStateListener
 {
     private IBurpExtenderCallbacks callbacks;
     private IExtensionHelpers helpers;
@@ -39,13 +39,12 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
 
         // obtain an extension helpers object
         helpers = callbacks.getHelpers();
-
+        this.callbacks.registerExtensionStateListener(this);
         // set our extension name
         callbacks.setExtensionName("GtScanner");
 
         // register ourselves as a custom scanner check
         callbacks.registerScannerCheck(this);
-        callbacks.registerExtensionStateListener(new GtExtensionStateListener());
         TagUtils.InitTags();
 
         GlobalFunction.callbacks = callbacks;
@@ -128,4 +127,8 @@ public class BurpExtender implements IBurpExtender, IScannerCheck
         else return 0;
     }
 
+    @Override
+    public void extensionUnloaded() {
+        ProcServer.getInstance().close();
+    }
 }

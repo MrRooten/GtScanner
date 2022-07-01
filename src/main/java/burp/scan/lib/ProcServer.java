@@ -341,6 +341,8 @@ public class ProcServer implements Runnable {
     int port;
     Logger logger;
     ServerSocket ss;
+
+    Thread currentThread;
     public ProcServer(int port) {
         this.port = port;
         this.logger = Logger.getLogger(Logger.Level.Debug);
@@ -351,7 +353,7 @@ public class ProcServer implements Runnable {
         logger.info("Starting ProcServer Class...");
         ss = null;
         Socket client = null;
-
+        currentThread = Thread.currentThread();
         try {
             ss = new ServerSocket(this.port);
         } catch (IOException e) {
@@ -371,6 +373,7 @@ public class ProcServer implements Runnable {
                 t.start();
             } catch (IOException e) {
                 logger.error(e.getLocalizedMessage());
+                return ;
             }
         }
 
@@ -379,6 +382,7 @@ public class ProcServer implements Runnable {
     public void close() {
         try {
             this.ss.close();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
