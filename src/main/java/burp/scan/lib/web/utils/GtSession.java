@@ -94,6 +94,7 @@ public class GtSession {
     public static GtSession getGlobalSession() {
         if (globalSession == null) {
             globalSession = new GtSession();
+            globalSession.setNoFollowUp();
         }
         globalSession.setProxy(Config.getInstance().getValue("http.proxy"));
         if (Config.getInstance().getValue("http.client").equalsIgnoreCase("burp")) {
@@ -125,6 +126,10 @@ public class GtSession {
         Proxy pp = new Proxy(type,new InetSocketAddress(host,port));
         client = _client.newBuilder().sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager),manager).
                 hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier()).proxy(pp).build();
+    }
+
+    public void setNoFollowUp() {
+        client = client.newBuilder().followRedirects(false).followSslRedirects(false).build();
     }
 
     public IHttpRequestResponse burpGet(String url) throws IOException {
@@ -281,13 +286,12 @@ public class GtSession {
     }
 
     public GtResponse sendRequest(GtRequest request) throws IOException {
-        if (isBurpRequest == true) {
+        if (isBurpRequest) {
             var url = new GtURL(request.getUrl());
             var httpService = GlobalFunction.helpers.buildHttpService(url.getHostWithoutPort(),url.getPort(), url.isHttps());
             IHttpRequestResponse result = null;
             result = GlobalFunction.callbacks.makeHttpRequest(httpService, request.raw());
-            var response = new GtResponse(result);
-            return response;
+            return new GtResponse(result);
         }
         Request req = request.getRequest();
         var res = this.client.newCall(req).execute();

@@ -50,8 +50,11 @@ public class BurpExtender implements IBurpExtender, IScannerCheck, IExtensionSta
         GlobalFunction.callbacks = callbacks;
         GlobalFunction.helpers = callbacks.getHelpers();
         FingerPrint.InitializeFingerPrints();
-        var procServer = ProcServer.getInstance();
-        procServer.run();
+        try {
+            var procServer = ProcServer.getInstance();
+            procServer.run();
+        } catch (Exception ignored) {
+        }
     }
 
     // helper method to search a response for occurrences of a literal match string

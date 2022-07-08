@@ -5,6 +5,7 @@ import burp.scan.active.ModuleBase;
 import burp.scan.active.feature.Disable;
 import burp.scan.active.feature.RunOnce;
 import burp.scan.lib.utils.Config;
+import burp.scan.lib.utils.Logger;
 import burp.scan.lib.web.WebPageInfo;
 import com.yevdo.jwildcard.JWildcard;
 
@@ -248,6 +249,7 @@ public class PassiveScanner {
         stdout.println(webInfo.getSiteInfo().getHost() + ":" + webInfo.getSiteInfo().getTags().toString());
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         var enableModules = getEnableModules();
+        Logger logger = Logger.getLogger(Logger.Level.Debug);
         for (ModuleWrapper module : enableModules) {
             if (module!=null && module.isFree()) {
                 module.getModule().scan(callbacks,webInfo);
@@ -266,7 +268,9 @@ public class PassiveScanner {
                         continue;
                     }
                     try {
+                        logger.debug("Running Module:"+module.getModule().getClass());
                         module.getModule().scan(callbacks, webInfo);
+                        logger.debug("End Module:"+module.getModule().getClass());
                     } catch (Exception e) {
                         callbacks.printError(e.getLocalizedMessage());
                     }

@@ -329,7 +329,7 @@ class Handler implements Runnable {
                     break;
                 }
                 continue;
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 break;
             }
         }

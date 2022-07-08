@@ -2,39 +2,33 @@ package test;
 
 import burp.scan.lib.ProcServer;
 import burp.scan.lib.utils.Config;
+import burp.scan.lib.web.utils.GtRequest;
+import burp.scan.lib.web.utils.GtSession;
 
 import java.io.IOException;
 
 
 public class Test {
-    static String payload = "POST /_ignition/execute-solution HTTP/1.1\n" +
-            "Host: 192.168.43.10:8083\n" +
-            "Accept-Encoding: gzip, deflate\n" +
-            "Accept: */*\n" +
-            "Accept-Language: en\n" +
-            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36\n" +
-            "Connection: close\n" +
-            "Content-Type: application/json\n" +
-            "Content-Length: 328\n" +
-            "\n" +
-            "{\n" +
-            "  \"solution\": \"Facade\\\\Ignition\\\\Solutions\\\\MakeViewVariableOptionalSolution\",\n" +
-            "  \"parameters\": {\n" +
-            "    \"variableName\": \"username\",\n" +
-            "    \"viewFile\": \"xxxxxx\"\n" +
-            "  }\n" +
-            "}";
+    static String payload = """
+            GET / HTTP/1.1
+            Host: baidu.com
+            Accept-Encoding: gzip, deflate
+            Accept: */*
+            Accept-Language: en
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36
+            Connection: close
+            Content-Type: application/json
+            Content-Length: 328
+
+            """;
     public static void test() {
         var b = Thread.currentThread().getStackTrace()[2];
         System.out.println(b.toString());
     }
     public static void main(String[] args) throws IOException {
-        ProcServer server = new ProcServer(9999);
-        server.run();
-        String regex = "([a-z])([A-Z]+)";
-        String replacement = "$1_$2";
-        System.out.println("Weblogi_cCVE2019725"
-                .replaceAll(regex, replacement)
-                .toLowerCase());
+        var request = new GtRequest("https://cn.bing.com");
+        var session = new GtSession();
+        var response = session.sendRequest(request);
+        System.out.println(new String(response.getBody()));
     }
 }

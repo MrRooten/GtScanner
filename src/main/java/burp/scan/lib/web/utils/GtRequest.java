@@ -1,9 +1,12 @@
 package burp.scan.lib.web.utils;
 
 import burp.IHttpService;
+import burp.IParameter;
+import burp.IRequestInfo;
 import burp.scan.lib.GlobalFunction;
 import burp.scan.lib.HTTPParser;
 import burp.scan.lib.RequestParser;
+import burp.scan.lib.utils.BytesUtils;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -21,7 +24,7 @@ public class GtRequest {
     Request request;
     boolean isHttps = false;
 
-    void buildRequest() {
+    public void buildRequest() {
         var requestBuilder = new Request.Builder();
         Headers.Builder headerBuilder = new Headers.Builder();
         for (String hh : headers) {
@@ -51,7 +54,6 @@ public class GtRequest {
         this.protocol = protocol;
         this.headers = headers;
         this.body = body;
-        buildRequest();
     }
 
     public GtRequest(String url) {
@@ -67,7 +69,6 @@ public class GtRequest {
         this.headers.add("User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Ch02.0.5005.63 Safari/537.36rome/1");
         this.headers.add("Accept: */*");
         this.body = null;
-        buildRequest();
     }
 
     public void setQueryPath(String queryPath) {
@@ -85,17 +86,28 @@ public class GtRequest {
     }
 
     public void setRequestBody(byte[] body) {
-        this.body = body;
+        RequestParser parser = new RequestParser(body);
+        this.method = parser.getMethod();
+        this.protocol = parser.getProtocol();
+        List<String> headers = new ArrayList<>();
+        for (var h : parser.getHeaders().entrySet()) {
+            String header = h.getKey() + ": " + h.getValue();
+            headers.add(header);
+        }
+        this.headers = headers;
+        if (parser.getBody() != null) {
+            this.body = parser.getBody().getBytes(StandardCharsets.UTF_8);
+        }
     }
 
     public void setRequestBody(String body) {
         this.body = body.getBytes(StandardCharsets.UTF_8);
     }
 
-    public void setHeader(String header) {
+    public GtRequest setHeader(String header) {
         var as = header.split(":",2);
         if (as.length != 2) {
-            return ;
+            return this;
         }
         var hKey = as[0].trim();
         var hValue = as[1].trim();
@@ -113,9 +125,10 @@ public class GtRequest {
         }
 
         this.headers.add(header);
+        return this;
     }
 
-    public void setHeader(String name,String value) {
+    public GtRequest setHeader(String name,String value) {
         for (var i=0;i < this.headers.size();i++) {
             var h = this.headers.get(i);
             var tmp = h.split(":",2);
@@ -130,9 +143,10 @@ public class GtRequest {
         }
 
         this.headers.add(name+": "+value);
+        return this;
     }
 
-    public void setHeader(String name,String value,int index) {
+    public GtRequest setHeader(String name,String value,int index) {
         for (var i=0;i < this.headers.size();i++) {
             var h = this.headers.get(i);
             var tmp = h.split(":",2);
@@ -147,8 +161,15 @@ public class GtRequest {
         }
 
         this.headers.add(index,name+": "+value);
+        return this;
     }
 
+    public GtRequest setRawSlice(int start,int end,byte[] replace) {
+        var rawRequest = this.raw();
+        rawRequest = BytesUtils.replaceBytes(rawRequest,replace,start,end);
+        this.setRequestBody(rawRequest);
+        return this;
+    }
     public GtRequest(byte[] request,boolean isHttps) {
         RequestParser parser = new RequestParser(request);
         this.method = parser.getMethod();
@@ -168,7 +189,6 @@ public class GtRequest {
         if (parser.getBody() != null) {
             this.body = parser.getBody().getBytes(StandardCharsets.UTF_8);
         }
-        buildRequest();
     }
 
     public GtResponse send() throws IOException {
@@ -188,6 +208,7 @@ public class GtRequest {
     }
 
     public Request getRequest() {
+        this.buildRequest();
         return this.request;
     }
     public byte[] raw() {
@@ -227,5 +248,11 @@ public class GtRequest {
         var u = new GtURL(this.url);
         var res = GlobalFunction.helpers.buildHttpService(u.getHostWithoutPort(),u.getPort(),this.isHttps);
         return res;
+    }
+
+    public List<IParameter> getParameters() {
+        byte[] raw = this.raw();
+        IRequestInfo requestInfo = GlobalFunction.helpers.analyzeRequest(raw);
+        return requestInfo.getParameters();
     }
 }

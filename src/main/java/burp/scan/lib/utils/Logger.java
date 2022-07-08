@@ -20,6 +20,8 @@ public class Logger {
 
     Level level;
 
+    Object obj;
+
     public Logger(Level level) {
         this.level = level;
     }
@@ -29,7 +31,8 @@ public class Logger {
     }
 
     String getCaller() {
-        return Thread.currentThread().getStackTrace()[3].toString();
+        String s = Thread.currentThread().getStackTrace()[3].toString();
+        return s.replaceAll("\\(.*\\)","");
     }
     public void debug(String message) {
         if (GlobalFunction.callbacks == null&&level.getLevel() <= Level.Debug.getLevel()) {
@@ -62,6 +65,7 @@ public class Logger {
     }
 
     public void error(String message) {
+
         if (GlobalFunction.callbacks == null&&level.getLevel() <= Level.Error.getLevel()) {
             System.out.println(String.format("[error:%s] ",getCaller())+message);
             return ;
