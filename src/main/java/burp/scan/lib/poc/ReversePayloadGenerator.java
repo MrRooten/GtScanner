@@ -7,24 +7,33 @@ import burp.scan.lib.GlobalFunction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReversePocClient {
+public class ReversePayloadGenerator {
     IBurpCollaboratorClientContext context;
     String payload;
-    public ReversePocClient() {
+    public ReversePayloadGenerator() {
         context = GlobalFunction.callbacks.createBurpCollaboratorClientContext();
     }
 
-    public String getPayload() {
-        payload = context.generatePayload(true);
+    static ReversePayloadGenerator generator = null;
+
+    static public ReversePayloadGenerator getInstance() {
+        if (generator == null) {
+            generator = new ReversePayloadGenerator();
+        }
+        return generator;
+    }
+    public String getReverseUrl() {
+        String payload = context.generatePayload(true);
         return payload;
     }
 
-    public List<PocResult> getResults() {
+    public List<PocResult> getResults(String payload) {
         List<IBurpCollaboratorInteraction> collaboratorInteractions = context.fetchCollaboratorInteractionsFor(payload);
         List<PocResult> results = new ArrayList<>();
         for (var interaction : collaboratorInteractions) {
-            results.add(new PocResult(interaction,payload));
+            results.add(new PocResult(interaction.getProperties(),payload));
         }
         return results;
     }
+
 }

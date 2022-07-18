@@ -187,7 +187,7 @@ class Handler implements Runnable {
             try {
                 int len = inputStream.read(b);
                 if (len == -1) {
-                    continue;
+                    return;
                 }
                 String msg = new String(b, 0, len);
 
@@ -321,16 +321,18 @@ class Handler implements Runnable {
 
                 } else if (action.equals("info_http")) {
 
+                } else if (action.equals("exit")) {
+                    return;
                 }
             } catch (JSONException ex) {
                 try {
                     err("Not a valid json String:" + ex.getLocalizedMessage(),outputStream);
                 } catch (IOException e) {
-                    break;
+                    return;
                 }
                 continue;
             } catch (Exception ex) {
-                break;
+                return;
             }
         }
     }
@@ -369,8 +371,7 @@ public class ProcServer implements Runnable {
                 var outputStream = client.getOutputStream();
                 var handler = new Handler();
                 handler.setStream(inputStream,outputStream);
-                var t = new Thread(handler);
-                t.start();
+                handler.run();
             } catch (IOException e) {
                 logger.error(e.getLocalizedMessage());
                 return ;
@@ -382,7 +383,6 @@ public class ProcServer implements Runnable {
     public void close() {
         try {
             this.ss.close();
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

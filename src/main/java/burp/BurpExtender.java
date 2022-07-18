@@ -54,6 +54,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck, IExtensionSta
             var procServer = ProcServer.getInstance();
             procServer.run();
         } catch (Exception ignored) {
+            ProcServer.getInstance().close();
         }
     }
 
@@ -132,6 +133,6 @@ public class BurpExtender implements IBurpExtender, IScannerCheck, IExtensionSta
 
     @Override
     public void extensionUnloaded() {
-        ProcServer.getInstance().close();
+
     }
 }

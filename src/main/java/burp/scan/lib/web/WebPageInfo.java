@@ -32,6 +32,8 @@ public class WebPageInfo {
     private IRequestInfo reqInfo;
     private IResponseInfo respInfo;
 
+    private boolean isHttps = false;
+
     private Config config = new Config();
     public void addTag(TagTypes type) {
         String typeString = TagUtils.toStandardName(type);
@@ -141,5 +143,12 @@ public class WebPageInfo {
 
     public List<IScanIssue> getIssues() {
         return this.issues;
+    }
+
+    public void setIsHttps(boolean isHttps) {
+        this.isHttps = isHttps;
+    }
+    public boolean isHttps() {
+        return this.isHttps;
     }
 }
